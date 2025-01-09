@@ -1,21 +1,24 @@
+'use client'
+
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import SidebarPage  from "@/app/sidebar/page"
+import Navbar from '../components/Navbar.jsx'
+import Sidebar from '../components/Sidebar.jsx'
+import { SidebarProvider } from '../contexts/sidebarContext.jsx'
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>){
   return (
     <html lang="en">
-      <body className={`dark`} >
+      <body className="dark">
         <SidebarProvider>
-          <SidebarPage/>
-            <main>
-              <SidebarTrigger/>
-              {children}
-            </main>
+          <Navbar/>
+          <div className="flex">
+            <Sidebar/>
+            {children}
+          </div>
         </SidebarProvider>
       </body>
     </html>
