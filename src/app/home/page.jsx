@@ -2,23 +2,17 @@
 
 import sample from '../../assets/sample.png'
 import dp from '../../assets/dp.jpg'
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SidebarContext } from '@/contexts/sidebarContext.jsx';
-
-let videoList = [
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-  {sample:sample,dp:dp,title:'Squid Game: Season 2 | Official Trailer',channel:'something small'},
-]
+import { useState, useEffect } from 'react';
 
 function HomePage() {
   const {isOpen} = useContext(SidebarContext) 
+  const [videoList, setVideoList] = useState()
+
+  useEffect(()=>{
+    
+  },[])
 
   return (
     <div className=''>
