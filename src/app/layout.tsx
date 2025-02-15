@@ -11,16 +11,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>){
   return (
-    <html lang="en">
-      <body className="dark">
-        <SidebarProvider>
-          <Navbar/>
-          <div className="flex">
-            <Sidebar/>
-            {children}
-          </div>
-        </SidebarProvider>
-      </body>
-    </html>
+      <html lang="en" style={{ scrollBehavior: "smooth",scrollbarWidth: "none" }} >
+        <body className="dark">
+          <SidebarProvider>
+            <Navbar/>
+            <div className="flex">
+              <Sidebar/>
+              {children}
+            </div>
+          </SidebarProvider>
+        </body>
+      </html>
   );
 }

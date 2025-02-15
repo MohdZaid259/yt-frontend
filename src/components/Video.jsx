@@ -1,9 +1,28 @@
+'use client'
+
 import sample from '../assets/sample.png'
 import dp from '../assets/dp.jpg'
 import { Bell, ChevronDown, ThumbsDown, ThumbsUp, ArrowDownToLine, Forward } from 'lucide-react'
 import Image from 'next/image'
+import { useCallback, useEffect, useState } from 'react'
+import axios from 'axios';
 
-function Video() {
+function Video({videoId}) {
+  const [video, setVideo] = useState()
+  const [loading,setLoading] = useState(true)
+
+  // console.log(videoId)
+  const handler = useCallback( async () => {
+    const response = await axios.get(`https://yt-backend-six.vercel.app/api/v1/video/${videoId}`)
+    console.log(response.data.data)
+    setLoading(false)
+  },[]
+  )
+  
+  useEffect(()=>{
+    handler()
+  },[handler])
+  
   return (
     <div className='flex flex-col w-[70%] pl-14 pr-8'>
       <div className='w-full'>
