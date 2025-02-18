@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from '../components/Navbar.jsx'
 import Sidebar from '../components/Sidebar.jsx'
 import { SidebarProvider } from '../contexts/sidebarContext.jsx'
+import store from '../store/store.js'
+import { Provider } from 'react-redux';
 
 export default function RootLayout({
   children,
@@ -13,6 +15,7 @@ export default function RootLayout({
   return (
       <html lang="en" style={{ scrollBehavior: "smooth",scrollbarWidth: "none" }} >
         <body className="dark">
+        <Provider store={store}>
           <SidebarProvider>
             <Navbar/>
             <div className="flex">
@@ -20,6 +23,7 @@ export default function RootLayout({
               {children}
             </div>
           </SidebarProvider>
+          </Provider>
         </body>
       </html>
   );

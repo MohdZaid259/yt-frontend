@@ -1,15 +1,10 @@
-'use client'
-
 import React from 'react'
 import Video from '../../../components/Video.jsx'
 import VideoSidebar from '../../../components/VideoSidebar.jsx'
-import { useParams } from 'next/navigation.js'
+// import { useParams } from 'next/navigation.js'
 
-function VideoPage() {
-  const params = useParams()
-  const {id} = params
-
-  console.log(id)
+async function VideoPage({params}) {
+  const {id} = await params
 
   return (
     <div className='flex'>

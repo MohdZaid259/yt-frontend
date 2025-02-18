@@ -1,15 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import {url} from '../../constant.js'
-
-console.log('url: ',url)
+const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const registerUser = createAsyncThunk('register', async (userData) => {
   try {
+
     const res = await axios.post(`${url}/user/register`,userData)
     console.log(res.data)
     return res.data
   } catch (err) {
+    console.log(err)
     throw err
   }
 })

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 function HomePage() {
   const {isOpen} = useContext(SidebarContext) 
@@ -13,9 +14,12 @@ function HomePage() {
   const [loading,setLoading] = useState(true)
   const router = useRouter()
   
+
+  console.log(baseUrl)
   const handler = useCallback( async () => {
       try {
-        const response = await axios.get('https://yt-backend-six.vercel.app/api/v1/video')
+        const response = await axios.get(`${baseUrl}/video`)
+        console.log(response)
         setVideoList(response.data.data)
         setLoading(false)
       } catch (error) {
@@ -33,7 +37,7 @@ function HomePage() {
       <div className={`pr-6 grid grid-cols-3 gap-y-6 gap-x-4 ${isOpen?'pt-2':'p-4'} w-full`}>
         {videoList.map((item,i)=>{
           return (
-            <div key={i} onClick={()=>router.push(`/video/${item.id}`)} className={`${isOpen?'w-[370px]':'w-[400px]'} ${loading?'bg-muted':''} rounded overflow-hidden`}>
+            <div key={i} onClick={()=>router.push(`/video/${item._id}`)} className={`${isOpen?'w-[370px]':'w-[400px]'} ${loading?'bg-muted':''} rounded overflow-hidden`}>
               <Link href={`/video/${item._id}`}><img className={`cursor-pointer hover:scale-105 duration-500 rounded-md object-center aspect-video object-cover`} src={item.thumbnail} alt='item'/></Link>
               <div className='flex items-start justify-start mt-3'>
                 <Link href={`/video/${item._id}`}><img className='cursor-pointer rounded-full border-[1px] border-red-500 w-9 mr-3' src={item.avatar} alt="dp" /></Link>

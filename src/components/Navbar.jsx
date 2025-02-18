@@ -4,9 +4,11 @@ import React,{ useContext } from 'react'
 import { Bell,Menu,Video,Mic,Search,CircleUser } from 'lucide-react';
 import yt from '../assets/yt.png'
 import { SidebarContext } from '@/contexts/sidebarContext';
+import { useRouter } from 'next/navigation';
 
 function Navbar() {
-const {toggleFn} = useContext(SidebarContext) 
+  const {toggleFn} = useContext(SidebarContext) 
+  const router = useRouter()
 
   return (
     <div className='flex justify-between items-center px-6 py-2'>
@@ -24,7 +26,7 @@ const {toggleFn} = useContext(SidebarContext)
       <div className='flex justify-around gap-5 items-center'>
         <Video className='cursor-pointer'/>
         <Bell className='cursor-pointer'/>
-        <div className='border p-1 px-2 border-white rounded-full cursor-pointer flex items-center gap-2'>
+        <div onClick={()=>router.push('/signup')} className='border p-1 px-2 border-white rounded-full hover:bg-slate-800 cursor-pointer flex items-center gap-2'>
           <CircleUser className=''/>
           <span className='text-sm'>Sign in</span>
         </div>

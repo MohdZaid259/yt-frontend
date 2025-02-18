@@ -6,14 +6,14 @@ import { Bell, ChevronDown, ThumbsDown, ThumbsUp, ArrowDownToLine, Forward } fro
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 function Video({videoId}) {
   const [video, setVideo] = useState()
   const [loading,setLoading] = useState(true)
 
-  // console.log(videoId)
   const handler = useCallback( async () => {
-    const response = await axios.get(`https://yt-backend-six.vercel.app/api/v1/video/${videoId}`)
+    const response = await axios.get(`${baseUrl}/video/${videoId}`)
     console.log(response.data.data)
     setLoading(false)
   },[]
