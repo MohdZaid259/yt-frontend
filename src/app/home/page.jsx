@@ -6,6 +6,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 function HomePage() {
@@ -13,13 +14,10 @@ function HomePage() {
   const [videoList, setVideoList] = useState([])
   const [loading,setLoading] = useState(true)
   const router = useRouter()
-  
-
-  console.log(baseUrl)
+    
   const handler = useCallback( async () => {
       try {
         const response = await axios.get(`${baseUrl}/video`)
-        console.log(response)
         setVideoList(response.data.data)
         setLoading(false)
       } catch (error) {

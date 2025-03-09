@@ -6,14 +6,15 @@ import { Bell, ChevronDown, ThumbsDown, ThumbsUp, ArrowDownToLine, Forward } fro
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios';
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 function Video({videoId}) {
   const [video, setVideo] = useState()
   const [loading,setLoading] = useState(true)
 
   const handler = useCallback( async () => {
-    const response = await axios.get(`${baseUrl}/video/${videoId}`)
+    const response = await axios.get(`${url}/video/${videoId}`)
     console.log(response.data.data)
     setLoading(false)
   },[]
