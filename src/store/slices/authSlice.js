@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
+import sendTokens from '../../lib/sendTokens.jsx'
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -26,9 +27,11 @@ export const registerUser = createAsyncThunk('register', async (data) => {
 })
 export const loginUser = createAsyncThunk('login', async (data) => {
   try {
-    const res = await axios.post(`${url}/user/login`,data)
+    const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
+    const accessToken = res.data.data.accessToken
+    const refreshToken = res.data.data.refreshToken
     toast.success('LoggedIn successfully!!')
-    return res.data.data.user
+    return { 'user':res.data.data.user, accessToken, refreshToken }
   } catch (err) {
     toast.error(err?.response?.data?.message);
     throw err
@@ -64,9 +67,13 @@ export const changePassword = createAsyncThunk('changePassword', async (data) =>
   }
 })
 export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
-  const res = await axios.get(`${url}/user/current-user`);
-  console.log(res.data)
-  return res.data
+  try {
+    const res = await axios.get(`${url}/user/current-user`,{withCredentials:true},sendTokens());
+    console.log('resData ', res.data)
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
 })
 export const updateAvatar = createAsyncThunk("updateAvatar", async (data) => {
   try {
@@ -137,7 +144,7 @@ const authSlice=createSlice({
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false
-        state.user = action.payload.user
+        state.user = action.payload?.user
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.payload;
@@ -161,7 +168,7 @@ const authSlice=createSlice({
         state.loading = false
         state.error = action.payload
       })
-      .addCase(getCurrentUser.fulfilled,(state)=>{
+      .addCase(getCurrentUser.fulfilled,(state,action)=>{
         state.loading = false
         state.user = action.payload.user
       })

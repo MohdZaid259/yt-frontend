@@ -5,7 +5,7 @@ let chipData = ['All', 'Music', 'Sitcoms', 'Mixes', 'Gaming', 'News', 'Satire', 
 
 function ChipsTab() {
   return(
-    <div className='mx-8 my-2 flex gap-3 whitespace-nowrap overflow-x-hidden'>
+    <div className='mx-0 mr-10 my-2 flex gap-3 whitespace-nowrap overflow-x-hidden'>
       {chipData.map((item,i)=> <div key={i}><Chip props={item}/></div>)}
     </div>
   )

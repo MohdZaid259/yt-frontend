@@ -10,7 +10,10 @@ import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 
 function LoginAccount() {
   const { handleSubmit, register, formState:{ errors } } = useForm()
+
   const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
+  const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useLocalStorage('refresh')
 
   const dispatch = useDispatch()
   const loading = useSelector((state)=>state.auth?.loading)
@@ -19,10 +22,13 @@ function LoginAccount() {
   const submit = async (data) => {
     const res = await dispatch(loginUser(data))
     const user = await dispatch(getCurrentUser())
+    console.log('user ',user)
+    
+    setAuth(res.payload.user)
+    setAccessToken(res.payload.accessToken)
+    setRefreshToken(res.payload.refreshToken)
 
-    setAuth(res.user)
-
-    if(user && res?.payload) {
+    if(true && res?.payload) {
       router.replace('/')
     }
   }
