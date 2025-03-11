@@ -2,45 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {url} from '../../constant.js'
 import axios from "axios";
 
-export const getCurrentUser = createAsyncThunk('getCurrentUser', async (data) => {
-  try {
-    const res = await axios.get(`${url}/user/current-user`,data)
-    console.log(res.data)
-    return res.data
-  } catch (err) {
-    throw err
-  }
-})
-
-export const updateAccount = createAsyncThunk('updateAccount', async (data) => {
-  try {
-    const res = await axios.patch(`${url}/user/update-account`,data)
-    console.log(res.data)
-    return res.data
-  } catch (err) {
-    throw err
-  }
-})
-
-export const updateAvatar = createAsyncThunk('updateAvatar', async (data) => {
-  try {
-    const res = await axios.patch(`${url}/user/update-avatar`,data)
-    console.log(res.data)
-    return res.data
-  } catch (err) {
-    throw err
-  }
-})
-
-export const updateCoverImage = createAsyncThunk('updateCoverImage', async (data) => {
-  try {
-    const res = await axios.patch(`${url}/user/update-cover-image`,data)
-    console.log(res.data)
-    return res.data
-  } catch (err) {
-    throw err
-  }
-})
+const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (data) => {
   try {
@@ -77,16 +39,32 @@ const userSlice = createSlice({
   initialState:{
     user:null,
     loading:false,
-    history:[],
-    error:null
+    history:[]
   },
   reducers:{},
   extraReducers:(builder)=>{
     builder
-      .addCase(getCurrentUser.fulfilled,(state,action)=>{
-        state.user = action.payload
-        state.loading = false
+      .addCase(updateWatchHistory.pending, (state) => {
+        state.loading = true;
       })
+      .addCase(updateWatchHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.history = action.payload;
+      })
+      .addCase(getChannelProfile.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChannelProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(watchHistory.pending, (state) => {
+          state.loading = true;
+      })
+      .addCase(watchHistory.fulfilled, (state, action) => {
+          state.loading = false;
+          state.history = action.payload;
+      });
   }
 })
 
