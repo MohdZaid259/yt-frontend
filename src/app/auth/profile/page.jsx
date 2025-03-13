@@ -4,11 +4,16 @@ import React from 'react'
 import axios from "axios";
 import { useRouter } from 'next/navigation.js'
 import noImage from '@/assets/noImage.jpeg'
+import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 function Profile() {
   const router = useRouter()
+  const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
+  const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useLocalStorage('refresh')
+  
   const [profile, setProfile] = React.useState({
     name: "Mohd Zaid",
     username: "mohdzaid259",
@@ -46,6 +51,9 @@ function Profile() {
   const handleLogout = async() => {
     try {
       await axios.post(`${url}/user/logout`)
+      setAccessToken('')
+      setRefreshToken('')
+      setAuth('')
       router.replace('/')
     } catch (err) {
       console.log(err);

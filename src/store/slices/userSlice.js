@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {url} from '../../constant.js'
 import axios from "axios";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
@@ -16,7 +15,14 @@ export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (
 
 export const getChannelProfile = createAsyncThunk('getChannelProfile', async (data) => {
   try {
-    const res = await axios.get(`${url}/user/channel-profile/${data}`)
+    const res = await axios.get(`${url}/user/channel/${data}`,{ },
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true 
+      })
     console.log(res.data)
     return res.data
   } catch (err) {

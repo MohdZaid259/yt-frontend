@@ -1,21 +1,24 @@
 'use client'
 
-import sample from '../assets/sample.png'
 import dp from '../assets/dp.jpg'
 import { Bell, ChevronDown, ThumbsDown, ThumbsUp, ArrowDownToLine, Forward } from 'lucide-react'
-import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
-import axios from 'axios';
-
-const url = process.env.NEXT_PUBLIC_BASE_URL;
+import { useDispatch } from 'react-redux'
+import { getVideoById } from '@/store/slices/videoSlice.js'
+import { getChannelProfile } from '@/store/slices/userSlice.js'
 
 function Video({videoId}) {
   const [video, setVideo] = useState()
+  const dispatch = useDispatch()
   const [loading,setLoading] = useState(true)
 
   const handler = useCallback( async () => {
-    const response = await axios.get(`${url}/video/${videoId}`)
-    console.log(response.data.data)
+    const res = await dispatch(getVideoById(videoId))
+    const ownerId = res.payload.owner
+    console.log('Oid' ,ownerId)
+    const ownerData = await dispatch(getChannelProfile(ownerId))
+    console.log(ownerData)
+    setVideo(res.payload)
     setLoading(false)
   },[]
   )
@@ -24,12 +27,13 @@ function Video({videoId}) {
     handler()
   },[handler])
   
+  if(loading) return <>Loading...</>
   return (
-    <div className='flex flex-col w-[70%] pl-14 pr-8'>
+    <div className='flex flex-col w-[70%] pr-8'>
       <div className='w-full'>
-        <Image layout="responsive" width={16} height={9} className='' src={sample.src} alt="" />
+        <video width="640" height="720" controls> <source src={video.videoFile} type="video/mp4" /></video>
         <div>
-          <h1 className='my-3 font-semibold text-xl'>Squid Game: Season 2 | Official Trailer Netflix India</h1>
+          <h1 className='my-3 font-semibold text-xl'>{video.title}</h1>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-4'>
               <div className='flex text-sm'>
@@ -48,7 +52,7 @@ function Video({videoId}) {
             <div className='flex gap-1 text-sm'>
               <div className='flex items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
                 <ThumbsUp className='p-[4px]'/>
-                <span className='mx-1 mr-2'>54</span>
+                <span className='mx-1 mr-2'>{video?.likes?.length}</span>
                 <span className='text-zinc-400'>|</span>
                 <ThumbsDown className='ml-1 p-[4px]'/>
               </div>
@@ -65,7 +69,7 @@ function Video({videoId}) {
         </div>
       </div>
       <div className='w-full my-4'>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. At sunt porro minima velit eius vero consequatur officiis, atque ullam sapiente doloremque necessitatibus rem voluptatem incidunt officia dicta natus eligendi corporis expedita. Voluptatibus, cupiditate corporis.
+        {video.description}
       </div>
     </div>
   )

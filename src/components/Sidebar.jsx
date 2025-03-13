@@ -19,7 +19,7 @@ function Sidebar() {
         <Film className="p-[2px]"/>
         <span className="ml-5">Shorts</span>
       </Link>
-      <Link href='/subscriptions' className="flex p-2 pr-4 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/subscriptions' className="flex p-2 pr-4 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <Inbox className="p-[2px]"/>
         <span className="ml-5">Subscriptions</span>
       </Link>
@@ -28,11 +28,11 @@ function Sidebar() {
         <span className="text-base font-semibold">You</span>
         <ChevronRight className="p-[2px]"/>
       </div>
-      <Link href='/history' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/history' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <History className="p-[2px]"/>
         <span className="ml-5">History</span>
       </Link>
-      <Link href='/playlist' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/playlist' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <ListVideo className="p-[2px]"/>
         <span className="ml-5">Playlist</span>
       </Link>
@@ -40,19 +40,19 @@ function Sidebar() {
         <Video className="p-[2px]"/>
         <span className="ml-5">Your videos</span>
       </Link>
-      <Link href='/courses' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/courses' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <Lightbulb className="p-[2px]"/>
         <span className="ml-5">Your courses</span>
       </Link>
-      <Link href='/watch-later' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/watch-later' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <Clock className="p-[2px]"/>
         <span className="ml-5">Watch Later</span>
       </Link>
-      <Link href='liked-videos' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/liked-videos' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <ThumbsUp className="p-[2px]"/>
         <span className="ml-5">Liked videos</span>
       </Link>
-      <Link href='/downloads' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+      <Link href='/auth/downloads' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <ArrowDownToLine className="p-[2px]"/>
         <span className="ml-5">Downloads</span>
       </Link>
@@ -70,7 +70,7 @@ function Sidebar() {
           <Film className="p-[2px]"/>
           <span className="text-xs">Shorts</span>
         </Link>
-        <Link href='courses' className="flex flex-col p-2 gap-y-1 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+        <Link href='/courses' className="flex flex-col p-2 gap-y-1 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
           <Inbox className="p-[2px]"/>
           <span className="text-xs">Courses</span>
         </Link>
@@ -78,11 +78,11 @@ function Sidebar() {
           <CircleUser className="p-[2px]"/>
           <span className="text-xs font-semibold">You</span>
         </div>
-        <Link href='/history' className="flex flex-col p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+        <Link href='/auth/history' className="flex flex-col p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
         <History className="p-[2px]"/>
         <span className="text-xs">History</span>
         </Link>
-        <Link href='/downloads' className="flex flex-col p-2 px-1 gap-y-1  items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+        <Link href='/auth/downloads' className="flex flex-col p-2 px-1 gap-y-1  items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
           <ArrowDownToLine className=""/>
           <span className="text-xs">Downloads</span>
         </Link>

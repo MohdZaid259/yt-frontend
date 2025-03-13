@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
-import sendTokens from '../../lib/sendTokens.jsx'
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
+
+const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+const accessToken = getAccessToken()
 
 export const registerUser = createAsyncThunk('register', async (data) => {
   const formData = new FormData()
@@ -68,8 +71,15 @@ export const changePassword = createAsyncThunk('changePassword', async (data) =>
 })
 export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
   try {
-    const res = await axios.get(`${url}/user/current-user`,{withCredentials:true},sendTokens());
-    console.log('resData ', res.data)
+    const res = await axios.post(`${url}/user/current-user`,{ },
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true 
+      }
+    );    
     return res.data
   } catch (err) {
     console.log(err)
@@ -170,7 +180,7 @@ const authSlice=createSlice({
       })
       .addCase(getCurrentUser.fulfilled,(state,action)=>{
         state.loading = false
-        state.user = action.payload.user
+        state.user = action.payload?.user
       })
       .addCase(getCurrentUser.pending,(state)=>{
         state.loading = true
