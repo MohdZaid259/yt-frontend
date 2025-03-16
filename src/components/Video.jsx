@@ -9,16 +9,16 @@ import { getChannelProfile } from '@/store/slices/userSlice.js'
 
 function Video({videoId}) {
   const [video, setVideo] = useState()
+  const [owner,setOwner] = useState()
   const dispatch = useDispatch()
   const [loading,setLoading] = useState(true)
 
   const handler = useCallback( async () => {
     const res = await dispatch(getVideoById(videoId))
     const ownerId = res.payload.owner
-    console.log('Oid' ,ownerId)
     const ownerData = await dispatch(getChannelProfile(ownerId))
-    console.log(ownerData)
     setVideo(res.payload)
+    setOwner(ownerData.payload)
     setLoading(false)
   },[]
   )
@@ -37,10 +37,10 @@ function Video({videoId}) {
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-4'>
               <div className='flex text-sm'>
-                <img className='rounded-full h-8 ' src={dp.src} alt="" />
+                <img className='rounded-full h-8 ' src={owner.avatar} alt="" />
                 <div className='flex flex-col ml-3'>
-                  <span className='font-semibold'>Netflix India</span>
-                  <span className='text-zinc-400 text-xs'>subscribers</span>
+                  <span className='font-semibold'>{owner.fullname}</span>
+                  <span className='text-zinc-400 text-xs'>{owner.subscribersCount} subsribers</span>
                 </div>
               </div>
               <div className='flex px-2 py-1 cursor-pointer rounded-full items-center text-sm bg-zinc-800 hover:bg-zinc-700 max-w-max'>

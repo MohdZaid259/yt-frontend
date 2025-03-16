@@ -7,13 +7,14 @@ import {loginUser,getCurrentUser} from '@/store/slices/authSlice.js'
 import { useRouter } from 'next/navigation.js'
 import { useForm } from 'react-hook-form'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
+import useSessionStorage from '../../hooks/useSessionStorage'
 
 function LoginAccount() {
   const { handleSubmit, register, formState:{ errors } } = useForm()
 
   const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
-  const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
-  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useLocalStorage('refresh')
+  const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
+  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useSessionStorage('refresh')
 
   const dispatch = useDispatch()
   const loading = useSelector((state)=>state.auth?.loading)
@@ -28,7 +29,6 @@ function LoginAccount() {
     const res = await dispatch(loginUser(data))
     const user = await dispatch(getCurrentUser())
     
-    console.log('user',user)
     setAuth(res.payload.user)
     setAccessToken(res.payload.accessToken)
     setRefreshToken(res.payload.refreshToken)

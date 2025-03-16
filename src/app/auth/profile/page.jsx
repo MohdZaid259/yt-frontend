@@ -5,14 +5,15 @@ import axios from "axios";
 import { useRouter } from 'next/navigation.js'
 import noImage from '@/assets/noImage.jpeg'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
+import useSessionStorage from '../../../hooks/useSessionStorage';
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
 function Profile() {
   const router = useRouter()
   const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
-  const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
-  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useLocalStorage('refresh')
+  const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
+  const [setRefreshToken,getRefreshToken,removeRefreshToken] = useSessionStorage('refresh')
   
   const [profile, setProfile] = React.useState({
     name: "Mohd Zaid",

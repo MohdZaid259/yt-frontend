@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSessionStorage from "@/hooks/useSessionStorage";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
 const accessToken = getAccessToken()
 
 export const getAllVideos = createAsyncThunk('getAllVideos', async () => {
@@ -30,7 +30,7 @@ export const deleteVideo = createAsyncThunk('deleteVideo', async () => {
 
 export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
   try {
-    const res = await axios.post(`${url}/video/${data}`,{ },{
+    const res = await axios.get(`${url}/video/${data}`,{
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',

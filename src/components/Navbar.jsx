@@ -5,13 +5,13 @@ import { Bell,Menu,Video,Mic,Search,CircleUser } from 'lucide-react';
 import yt from '../assets/yt.png'
 import { SidebarContext } from '@/contexts/sidebarContext';
 import { useRouter } from 'next/navigation';
-import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 import { useDispatch } from 'react-redux';
 import { getCurrentUser } from '@/store/slices/authSlice';
+import useSessionStorage from '@/hooks/useSessionStorage'
 
 function Navbar() {
   const {toggleFn} = useContext(SidebarContext) 
-  const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+  const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
   const dispatch = useDispatch()
   const router = useRouter()
   const token = getAccessToken()

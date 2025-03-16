@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useSessionStorage from '../../hooks/useSessionStorage'
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-const [setAccessToken,getAccessToken,removeAccessToken] = useLocalStorage('access')
+const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
 const accessToken = getAccessToken()
 
 export const registerUser = createAsyncThunk('register', async (data) => {
@@ -71,7 +71,7 @@ export const changePassword = createAsyncThunk('changePassword', async (data) =>
 })
 export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
   try {
-    const res = await axios.post(`${url}/user/current-user`,{ },
+    const res = await axios.get(`${url}/user/current-user`,
       {
         headers: {
           'Authorization': `Bearer ${accessToken}`,

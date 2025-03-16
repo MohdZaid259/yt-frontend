@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import useSessionStorage from "@/hooks/useSessionStorage";
 import axios from "axios";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
+
+const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
+const accessToken = getAccessToken()
 
 export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (data) => {
   try {
@@ -15,7 +19,7 @@ export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (
 
 export const getChannelProfile = createAsyncThunk('getChannelProfile', async (data) => {
   try {
-    const res = await axios.get(`${url}/user/channel/${data}`,{ },
+    const res = await axios.get(`${url}/user/channel/${data}`,
       {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -23,8 +27,7 @@ export const getChannelProfile = createAsyncThunk('getChannelProfile', async (da
         },
         withCredentials: true 
       })
-    console.log(res.data)
-    return res.data
+    return res.data.data
   } catch (err) {
     throw err
   }
