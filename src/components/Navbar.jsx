@@ -5,7 +5,7 @@ import { Bell,Menu,Video,Mic,Search,CircleUser } from 'lucide-react';
 import yt from '../assets/yt.png'
 import { SidebarContext } from '@/contexts/sidebarContext';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser } from '@/store/slices/authSlice';
 import useSessionStorage from '@/hooks/useSessionStorage'
 
@@ -13,16 +13,12 @@ function Navbar() {
   const {toggleFn} = useContext(SidebarContext) 
   const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
   const dispatch = useDispatch()
+  const user = useSelector((state)=>state.auth.user)
   const router = useRouter()
   const token = getAccessToken()
-  const [dp,setDp] = useState(null)
 
   useEffect(()=>{
-    async function fetchData (){
-      const user = await dispatch(getCurrentUser())
-      setDp(user?.payload?.data?.avatar)
-    }
-    fetchData()
+    dispatch(getCurrentUser())
   },[])
 
   return (
@@ -42,7 +38,7 @@ function Navbar() {
         <Video className='cursor-pointer'/>
         <Bell className='cursor-pointer'/>
         <div onClick={()=>router.push(token?'/auth/profile':'/signup')} className={`${token?'':'border'} p-1 px-2 border-white rounded-full hover:bg-slate-800 cursor-pointer flex items-center gap-2`}>
-          {token?<img className='w-8 rounded-full' src={dp} alt='user'/>:<CircleUser />}
+          {token?<img className='w-8 rounded-full' src={user?.data?.avatar} alt='user'/>:<CircleUser />}
           {token?<></>:<span className='text-sm'>SignUp</span>}
         </div>
       </div>

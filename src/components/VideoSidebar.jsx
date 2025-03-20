@@ -1,27 +1,53 @@
+'use client'
+
+import { useState, useEffect, useCallback } from "react"
+import { getShorts } from '@/store/slices/videoSlice.js'
+import { useDispatch } from 'react-redux'
+import { useRouter } from "next/navigation";
+
 export default function Sidebar() {
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const [data,setData] = useState({
+    shorts:[],
+    videos:[]
+  })
+  
+  const handler = useCallback( async () => {
+    const res = await dispatch(getShorts())
+    setData((prev)=>({
+      ...prev,
+      shorts:res.payload.shorts,
+      videos:res.payload.videos
+    }))  
+  },[])
+
+  useEffect(()=>{
+    handler()
+  },[handler])
+
   return (
-    <aside className="space-y-6">
-      <div className="flex text-sm gap-2 overflow-x-auto pb-2">
-        <div className={`flex px-2 py-1 items-center justify-start rounded-lg cursor-pointer bg-white text-black`}>All</div>
-        <div className={`flex px-2 py-1 items-center justify-start rounded-lg cursor-pointer bg-zinc-800`}>From the series</div>
-        <div className={`flex px-2 py-1 items-center justify-start rounded-lg cursor-pointer bg-zinc-800`}>From Khayal e Yaar</div>
-      </div>
-      <div className="space-y-4">
+    <aside className="space-y-6 w-3/5">
+      <div className="space-y-4 mt-5">
         <h2 className="font-semibold text-xl">Shorts</h2>
-        <div className="grid grid-cols-3 gap-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="aspect-[9/16] rounded-lg bg-muted" />
+        <div className="flex justify-center">
+          {data.shorts.map((item,i) => (
+            <div onClick={()=>router.push(`/video/${item.id.videoId}`)} key={i} className="p-2 rounded-lg w-1/3">
+              <img src={item.snippet.thumbnails.default.url} alt="shorts" className="h-32" />
+              <h3 className="mt-2 text-sm">{item.snippet.title}</h3>
+              <p className="text-xs text-gray-500">{item.snippet.channelTitle}</p>
+            </div>
           ))}
         </div>
       </div>
-      <div className="space-y-4">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex gap-2">
-            <div className="w-40 aspect-video rounded bg-muted flex-shrink-0" />
-            <div>
-              <h3 className="font-medium line-clamp-2">Video Title</h3>
-              <p className="text-sm text-muted-foreground">Channel Name</p>
-              <p className="text-sm text-muted-foreground">123K views • 2 years ago</p>
+      <div className="space-y-4 ml-5">
+      <h2 className="font-semibold -ml-5 my-5 text-xl">Recommendations</h2>
+        {data.videos.map((item, i) => (
+          <div onClick={()=>router.push(`/video/${item.id}`)} key={i} className="flex gap-2">
+            <img src={item.snippet.thumbnails.default.url} alt="" className="scale-125 rounded-md"/>
+            <div className="ml-5">
+              <h3 className="font-medium text-sm line-clamp-2">{item.snippet.title}</h3>
+              <p className="text-xs text-muted-foreground">{item.snippet.channelTitle}</p>
             </div>
           </div>
         ))}

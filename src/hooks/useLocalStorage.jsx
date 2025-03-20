@@ -1,21 +1,26 @@
-function useLocalStorage(key) {
+function useLocalStorage(key, isArray=false) {
 
   const setData = (value) => {
-    if (typeof window !== "undefined") {
+    if(isArray){
+      let existingData = JSON.parse(window.localStorage.getItem(key)) || [];
+      existingData.push(value);
+      window.localStorage.setItem(key, JSON.stringify(existingData))
+    }else{
       window.localStorage.setItem(key, JSON.stringify(value));
     }
   };
 
   const getData = () => {
-    if (typeof window !== "undefined") {
-      const storedValue = window.localStorage.getItem(key);
-      return storedValue ? JSON.parse(storedValue) : null;
-    }
-    return null;
+    const data = JSON.parse(window.localStorage.getItem(key));
+    return isArray ? data || [] : null;
   };
 
-  const removeData = () => {
-    if (typeof window !== "undefined") {
+  const removeData = (value) => {
+    if(isArray){
+      let existingData = JSON.parse(window.localStorage.getItem(key)) || [];
+      existingData=existingData.filter((item)=>item.id!==value.id)
+      window.localStorage.setItem(key, JSON.stringify(existingData));
+    }else{
       window.localStorage.removeItem(key);
     }
   };

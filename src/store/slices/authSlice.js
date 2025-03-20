@@ -30,11 +30,26 @@ export const registerUser = createAsyncThunk('register', async (data) => {
 })
 export const loginUser = createAsyncThunk('login', async (data) => {
   try {
-    const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
-    const accessToken = res.data.data.accessToken
-    const refreshToken = res.data.data.refreshToken
-    toast.success('LoggedIn successfully!!')
-    return { 'user':res.data.data.user, accessToken, refreshToken }
+    if(accessToken){
+      console.log('intact login')
+      const res = await axios.get(`${url}/user/current-user`,
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true 
+        }
+      );
+      return {'user':res.data.data}
+    }else{
+      console.log('logging in')
+      const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
+      const accessToken = res.data.data.accessToken
+      const refreshToken = res.data.data.refreshToken
+      toast.success('LoggedIn successfully!!')
+      return { 'user':res.data.data.user, accessToken, refreshToken }
+    }
   } catch (err) {
     toast.error(err?.response?.data?.message);
     throw err

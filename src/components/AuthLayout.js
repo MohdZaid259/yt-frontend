@@ -6,10 +6,8 @@ import { useSelector } from 'react-redux';
 
 const AuthLayout = ({ children }) => {
   const router = useRouter();
-  const { user, loading } = useSelector((state)=>({
-    user: state.auth.isAuthenticated, 
-    loading: state.auth.loading
-  }))
+  const user = useSelector((state)=> state.auth?.isAuthenticated)
+  const loading = useSelector((state)=> state.auth?.loading)
 
   useEffect(() => {
     if (!loading && !user) {
