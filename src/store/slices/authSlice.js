@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
-import useSessionStorage from '../../hooks/useSessionStorage'
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
-
-const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
-const accessToken = getAccessToken()
 
 export const registerUser = createAsyncThunk('register', async (data) => {
   const formData = new FormData()
@@ -30,26 +26,11 @@ export const registerUser = createAsyncThunk('register', async (data) => {
 })
 export const loginUser = createAsyncThunk('login', async (data) => {
   try {
-    if(accessToken){
-      console.log('intact login')
-      const res = await axios.get(`${url}/user/current-user`,
-        {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true 
-        }
-      );
-      return {'user':res.data.data}
-    }else{
-      console.log('logging in')
-      const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
-      const accessToken = res.data.data.accessToken
-      const refreshToken = res.data.data.refreshToken
-      toast.success('LoggedIn successfully!!')
-      return { 'user':res.data.data.user, accessToken, refreshToken }
-    }
+    const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
+    const accessToken = res.data.data.accessToken
+    const refreshToken = res.data.data.refreshToken
+    toast.success('LoggedIn successfully!!')
+    return { 'user':res.data.data.user, accessToken, refreshToken }
   } catch (err) {
     toast.error(err?.response?.data?.message);
     throw err
@@ -66,7 +47,7 @@ export const refreshToken = createAsyncThunk('refreshToken', async ()=>{
 })
 export const logoutUser = createAsyncThunk('logout', async () => {
   try {
-    await axios.post(`${url}/user/logout`)
+    await axios.post(`${url}/user/logout`,{},{withCredentials:true})
     toast.success('Logged Out!!')
   } catch (err) {
     toast.error(err?.response?.data?.message)
@@ -86,6 +67,9 @@ export const changePassword = createAsyncThunk('changePassword', async (data) =>
 })
 export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/user/current-user`,
       {
         headers: {
@@ -95,7 +79,7 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
         withCredentials: true 
       }
     );    
-    return res.data
+    return res.data.data
   } catch (err) {
     console.log(err)
   }
@@ -195,7 +179,8 @@ const authSlice=createSlice({
       })
       .addCase(getCurrentUser.fulfilled,(state,action)=>{
         state.loading = false
-        state.user = action.payload?.user
+        state.user = action.payload
+        state.isAuthenticated = true
       })
       .addCase(getCurrentUser.pending,(state)=>{
         state.loading = true

@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from "react";
-import { ListVideo, Home, Inbox, Film, Lightbulb, ArrowDownToLine, Video, History, ThumbsUp, Clock, ChevronRight, CircleUser } from "lucide-react"
+import { ListVideo, Home, Inbox, Film, LayoutDashboard, Lightbulb, ArrowDownToLine, Video, History, ThumbsUp, Clock, ChevronRight, CircleUser } from "lucide-react"
 import { SidebarContext } from '@/contexts/sidebarContext';
 import Link from "next/link";
 
@@ -57,6 +57,10 @@ function Sidebar() {
         <span className="ml-5">Downloads</span>
       </Link>
       <hr className="bg-white my-2"/>
+      <Link href='/auth/dashboard' className="flex p-2 items-center justify-start rounded-lg cursor-pointer hover:bg-zinc-800">
+        <LayoutDashboard className="p-[2px]"/>
+        <span className="ml-5">My Dashboard</span>
+      </Link>
     </div>
   )}
   else{

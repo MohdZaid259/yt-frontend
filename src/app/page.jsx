@@ -1,5 +1,5 @@
 import ChipsTab from '../components/ChipsTab.jsx'
-import HomePage from '../app/home/page.jsx'
+import HomePage from './home/page.jsx'
 
 export default function Home() {
   return (

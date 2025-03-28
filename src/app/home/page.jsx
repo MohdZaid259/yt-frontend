@@ -5,7 +5,8 @@ import { SidebarContext } from '@/contexts/sidebarContext.jsx';
 import { useDispatch,useSelector } from 'react-redux'
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllVideos,makeVidoesNull } from '@/store/slices/videoSlice.js'
+import { getAllVideos } from '@/store/slices/videoSlice.js'
+import makeVidoesNull from '@/store/slices/videoSlice.js'
 
 function HomePage() {
   const {isOpen} = useContext(SidebarContext) 
@@ -14,9 +15,9 @@ function HomePage() {
   const video = useSelector((state)=>state.video.videos)
   const loading = useSelector((state)=>state.video.loading)
     
-  const handler = useCallback( async () => {
-    await dispatch(getAllVideos())
-        
+  const handler = useCallback( () => {
+    dispatch(getAllVideos())
+    
     return ()=> dispatch(makeVidoesNull())
   },[])
 

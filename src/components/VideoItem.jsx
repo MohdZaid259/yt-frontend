@@ -1,7 +1,10 @@
 import React from 'react'
 import { MoreVertical } from "lucide-react"
 
-function VideoItem({ number, thumbnail, title, channel, views, time, duration }) {
+function VideoItem({ number=0, thumbnail='sample thumbnail', title='sample title', channel='sample channel', views=0, duration=0 }) {
+  console.log(number,thumbnail,title,channel,views,duration)
+  console.log('loggged')
+  
   return (
     <div className="flex gap-3">
       <div className="w-6 text-gray-400 pt-1 text-center">{number}</div>
@@ -15,7 +18,6 @@ function VideoItem({ number, thumbnail, title, channel, views, time, duration })
         <div className="flex text-gray-400 text-xs mt-0.5">
           <span>{views}</span>
           <span className="mx-1">•</span>
-          <span>{time}</span>
         </div>
       </div>
       <button className="text-gray-400 self-start">

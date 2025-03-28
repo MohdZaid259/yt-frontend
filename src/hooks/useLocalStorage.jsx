@@ -12,7 +12,7 @@ function useLocalStorage(key, isArray=false) {
 
   const getData = () => {
     const data = JSON.parse(window.localStorage.getItem(key));
-    return isArray ? data || [] : null;
+    return isArray ? data || [] : data;
   };
 
   const removeData = (value) => {

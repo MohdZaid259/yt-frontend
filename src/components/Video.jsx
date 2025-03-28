@@ -24,8 +24,8 @@ function Video({videoId}) {
     }else{
       await dispatch(searchVideo(videoId))
     }
-  },[])
-  
+  },[videoId,dispatch])
+
   useEffect(()=>{
     handler()
   },[handler])
@@ -39,16 +39,16 @@ function Video({videoId}) {
   return (
     <div className='flex flex-col w-[70%] pr-8 mt-5'>
       <div className='w-full'>
-        {video.videoFile && <video width="680" height="360" controls className='rounded-md'> <source src={video.videoFile} type="video/mp4" /></video>}
-        {video.id && <iframe width="680" height="360" src={`https://www.youtube.com/embed/${video.id}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-md"/>}
-        <div>{console.log(video.id)}
-          <h1 className='my-3 font-semibold text-xl'>{video.title || video.snippet.title}</h1>
+        {video?.videoFile && <video width="680" height="360" controls className='rounded-md'> <source src={video?.videoFile} type="video/mp4" /></video>}
+        {video?.id && <iframe width="680" height="360" src={`https://www.youtube.com/embed/${video?.id}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-md"/>}
+        <div>
+          <h1 className='my-3 font-semibold text-xl'>{video?.title || video?.snippet.title}</h1>
           <div className='flex justify-between items-center'>
             <div className='flex items-center gap-4 space-y-8'>
               <div className='flex text-sm'>
-                <img className='rounded-full h-10 border-white border aspect-square' src={owner?.avatar || video.snippet.thumbnails.default.url} alt="" />
+                <img className='rounded-full h-10 border-white border aspect-square' src={owner?.avatar || video?.snippet?.thumbnails?.default?.url} alt="" />
                 <div className='flex flex-col ml-3'>
-                  <span className='font-semibold'>{owner?.fullname || video?.snippet.channelTitle}</span>
+                  <span className='font-semibold'>{owner?.fullname || video?.snippet?.channelTitle}</span>
                   <span className='text-zinc-400 text-xs'>{owner?.subscribersCount || 0} subsribers</span>
                 </div>
               </div>
@@ -78,7 +78,7 @@ function Video({videoId}) {
         </div>
       </div>
       <div className='w-full my-4 line-clamp-2 '>
-        {video.description || video.snippet.localized.description}
+        {video?.description || video?.snippet.localized.description}
       </div>
     </div>
   )
