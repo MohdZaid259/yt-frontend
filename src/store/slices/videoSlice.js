@@ -18,12 +18,45 @@ export const getAllVideos = createAsyncThunk('getAllVideos', async () => {
   }
 })
 
-export const publishVideo = createAsyncThunk('publishVideo', async () => {
+export const publishVideo = createAsyncThunk('publishVideo', async (data) => {
+  const formData = new FormData();
+  formData.append("title", data.title);
+  formData.append("description", data.description);
+  formData.append("videoFile", data.video);
+  formData.append("thumbnail", data.thumbnail);
 
+  try {
+      const res = await axios.post(`${url}/video/upload-video`, formData, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        withCredentials: true 
+      });
+      toast.success('Video Uploaded!!')
+      return res.data.data
+  } catch (err) {
+      throw err
+  }
 })
 
-export const updateVideo = createAsyncThunk('updateVideo', async () => {
-
+export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, data }) => {
+  const formData = new FormData();
+  formData.append("title", data.title);
+  formData.append("description", data.description);
+  formData.append("thumbnail", data.thumbnail);
+console.log('inside slice')
+  try {
+      const res = await axios.patch(`${url}/video/${videoId}`, formData, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
+        withCredentials: true 
+      });
+      toast.success('Video Updated!!');
+      return res.data.data
+  } catch (err) {
+      throw err
+  }
 })
 
 export const deleteVideo = createAsyncThunk('deleteVideo', async () => {

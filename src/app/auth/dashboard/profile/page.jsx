@@ -26,7 +26,7 @@ function Profile() {
   }
   
   return (
-    <div className="max-w-3xl mx-auto border-white border rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div className="max-w-3xl scale-75 aspect-square border-white border rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <div className="relative h-48 md:h-64 rounded-t-lg overflow-hidden">
         <img src={user.coverImage} alt="Channel Cover" className="w-full h-full rounded-xl object-cover" />
       </div>

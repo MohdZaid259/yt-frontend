@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { SidebarContext } from '@/contexts/sidebarContext.jsx';
-import { useDispatch,useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllVideos } from '@/store/slices/videoSlice.js'
@@ -28,7 +28,7 @@ function HomePage() {
   if(loading) return <Skeleton/>
   return (
     <div className=''>
-      <div className={`pr-6 grid grid-cols-3 gap-y-6 gap-x-4 ${isOpen?'pt-2':'p-4'} w-full`}>
+      <div className={`grid grid-cols-3 gap-y-6 gap-x-4 ${isOpen?'pt-2':'pt-4'} w-full`}>
         {video?.map((item,i)=>{
           return (
             <div key={i} onClick={()=>router.push(`/video/${item._id}`)} className={`${isOpen?'w-[370px]':'w-[400px]'} min-h-24 rounded overflow-hidden`}>

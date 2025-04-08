@@ -29,7 +29,7 @@ function CreateAccount() {
 
   if(loading) return <>Loading...</>
   return (
-    <div className="container  absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-xl">
+    <div className="container absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-xl">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Create your account</CardTitle>

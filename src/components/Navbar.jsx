@@ -25,7 +25,7 @@ function Navbar() {
         </div>
         <Mic className='cursor-pointer'/>
       </div>
-      <div className='flex justify-around gap-5 items-center'>
+      <div className='flex justify-around gap-5 mr-5 items-center'>
         <Video className='cursor-pointer'/>
         <Bell className='cursor-pointer'/>
         <div onClick={()=>router.push(user?'/auth/profile':'/signup')} className={`${user?'':'border'} p-1 px-2 border-white rounded-full hover:bg-slate-800 cursor-pointer flex items-center gap-2`}>

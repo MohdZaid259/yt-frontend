@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, X } from "lucide-react"
@@ -11,33 +10,50 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import { useDispatch } from "react-redux"
+import { publishVideo } from '@/store/slices/videoSlice.js'
 
 export function UploadForm() {
   const router = useRouter()
-  const [uploading, setUploading] = useState(false)
-  const [videoFile, setVideoFile] = useState()
-  const [thumbnailPreview, setThumbnailPreview] = useState()
+  const dispatch = useDispatch()
+  const [formData, setFormData] = useState({
+    video: null,
+    thumbnail: null,
+    title: "",
+    description: "",
+  });
 
-  const handleVideoChange = () => {
-    if (e.target.files && e.target.files[0]) {
-      setVideoFile(e.target.files[0])
+  const videoFile = formData.video
+  const thumbnailPreview = formData.thumbnail
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  const removeThumbnail = () => {
+    setFormData((prev) => ({
+      ...prev,
+      thumbnail: null,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { video, thumbnail, title, description } = formData
+
+    if (!video || !thumbnail || !title || !description) {
+      alert("Please fill in all fields.")
+      return
     }
-  }
 
-  const handleThumbnailChange = () => {
-
-  }
-
-  const handleSubmit = () => {
-    e.preventDefault()
-    setUploading(true)
-
-    // Simulate upload
-    setTimeout(() => {
-      setUploading(false)
-      router.push("/dashboard")
-    }, 1500)
-  }
+    await dispatch(publishVideo(formData))
+  };
 
   return (
     <Card>
@@ -61,9 +77,10 @@ export function UploadForm() {
               <Input
                 id="video-upload"
                 type="file"
+                name='video'
                 accept="video/*"
                 className={videoFile ? "hidden" : "mt-4"}
-                onChange={handleVideoChange}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -73,7 +90,7 @@ export function UploadForm() {
                 {thumbnailPreview ? (
                   <div className="relative w-full max-w-[320px]">
                     <Image
-                      src={thumbnailPreview || "/placeholder.svg"}
+                      src={URL.createObjectURL(thumbnailPreview) || "/placeholder.svg"}
                       alt="Thumbnail preview"
                       width={320}
                       height={180}
@@ -84,7 +101,7 @@ export function UploadForm() {
                       variant="destructive"
                       size="icon"
                       className="absolute right-2 top-2"
-                      onClick={''}
+                      onClick={removeThumbnail}
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -102,9 +119,10 @@ export function UploadForm() {
                     <Input
                       id="thumbnail-upload"
                       type="file"
+                      name='thumbnail'
                       accept="image/*"
                       className="hidden"
-                      onChange={handleThumbnailChange}
+                      onChange={handleChange}
                     />
                   </div>
                 )}
@@ -112,21 +130,19 @@ export function UploadForm() {
             </div>
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
-            <Input id="title" placeholder="Video title" required />
+            <Input id="title" name="title" value={formData.title} onChange={handleChange} placeholder="Video title" required />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" placeholder="Video description" rows={3} />
+            <Textarea id="description" name="description" value={formData.description} onChange={handleChange} placeholder="Video description" rows={3} />
           </div>
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => router.push("/dashboard")}>
               Cancel
             </Button>
-            <Button type="submit" disabled={!videoFile || uploading}>
-              {uploading ? "Uploading..." : "Upload"}
-            </Button>
+            <Button type="submit"> Upload </Button>
           </div>
         </form>
       </CardContent>

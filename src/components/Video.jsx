@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, ChevronDown, ThumbsDown, ThumbsUp, ArrowDownToLine, Forward } from 'lucide-react'
+import { Bell, CircleCheck, ThumbsDown, Bookmark, ThumbsUp, ArrowDownToLine } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
 import { getVideoById, searchVideo } from '@/store/slices/videoSlice.js'
@@ -9,11 +9,20 @@ import toast from 'react-hot-toast'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 
 function Video({videoId}) {
+  const dispatch = useDispatch()
   const [owner,setOwner] = useState()
   const video = useSelector((state)=>state.video.video)
   const loading = useSelector((state)=>state.video.loading)
-  const dispatch = useDispatch()
+  const [status, setStatus] = useState({
+    subscribe:false,
+    download: false,
+    watch: false,
+    like: false,
+    dislike:false
+  });
   const [setDownload,getDownload,removeDownload] = useLocalStorage('download',true)
+  const [setWatch,getWatch,removeWatch] = useLocalStorage('watchLater',true)
+  const [setLiked, getLiked, removeLiked] = useLocalStorage('likedVideo',true)
 
   const handler = useCallback( async () => {
     if(videoId.length == 24){
@@ -30,11 +39,34 @@ function Video({videoId}) {
     handler()
   },[handler])
 
+  function handleSubscribe(){
+    setStatus(prev => ({ ...prev, subscribe: !prev.subscribe }))
+    toast.success('Subscribed!!')
+  }
+
   function handleDownload(){
+    setStatus(prev => ({ ...prev, download: !prev.download }))
     setDownload({ video, owner })
     toast.success('Video Downloading...')
   }
+
+  function handleLiked(){
+    setStatus(prev => ({ ...prev, like: !prev.like }))
+    setLiked({ video, owner })
+    toast.success('Video Liked!')
+  }
+
+  function handleDisliked(){
+    setStatus(prev=> ({ ...prev, dislike: !prev.dislike }))
+    toast.success('VideoDisliked!')
+  }
   
+  function handleWatch(){
+    setStatus(prev => ({ ...prev, watch: !prev.watch }))
+    setWatch({ video, owner })
+    toast.success('Video Saved!')
+  }
+
   if(loading) return <>Loading...</>
   return (
     <div className='flex flex-col w-[70%] pr-8 mt-5'>
@@ -42,9 +74,9 @@ function Video({videoId}) {
         {video?.videoFile && <video width="680" height="360" controls className='rounded-md'> <source src={video?.videoFile} type="video/mp4" /></video>}
         {video?.id && <iframe width="680" height="360" src={`https://www.youtube.com/embed/${video?.id}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-md"/>}
         <div>
-          <h1 className='my-3 font-semibold text-xl'>{video?.title || video?.snippet.title}</h1>
+          <h1 className='my-3 mb-5 font-semibold text-xl'>{video?.title || video?.snippet.title}</h1>
           <div className='flex justify-between items-center'>
-            <div className='flex items-center gap-4 space-y-8'>
+            <div className='flex items-start gap-6 '>
               <div className='flex text-sm'>
                 <img className='rounded-full h-10 border-white border aspect-square' src={owner?.avatar || video?.snippet?.thumbnails?.default?.url} alt="" />
                 <div className='flex flex-col ml-3'>
@@ -52,32 +84,31 @@ function Video({videoId}) {
                   <span className='text-zinc-400 text-xs'>{owner?.subscribersCount || 0} subsribers</span>
                 </div>
               </div>
-              <div className='flex px-2 py-1 cursor-pointer rounded-full items-center text-sm bg-zinc-800 hover:bg-zinc-700 max-w-max'>
-                <Bell className='p-[4px]'/>
-                Subscribe
-                <ChevronDown className='p-[4px]'/>
+              <div onClick={handleSubscribe} className='flex px-2 pr-4 py-1 mt-1 cursor-pointer rounded-full items-center text-sm bg-zinc-800 hover:bg-zinc-700 max-w-max'>
+                {status.subscribe?<Bell className='p-[4px] fill-white'/>:<Bell className='p-[4px]'/>}
+                {status.subscribe?'Subscribed':'Subscribe'}
               </div>
             </div>
             <div className='flex gap-1 text-sm'>
               <div className='flex items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
-                <ThumbsUp className='cursor-pointer p-[4px]'/>
-                <span className='mx-1 mr-2'>{video?.likes?.length || video?.statistics?.likeCount}</span>
+                <ThumbsUp onClick={handleLiked} className={`cursor-pointer ${status.like?'fill-white':''} p-[4px]`}/>
+                <span className='mx-1 mr-2'>{video?.likes?.length || video?.statistics?.likeCount || 0}</span>
                 <span className='cursor-default text-zinc-400'>|</span>
-                <ThumbsDown className='cursor-pointer ml-1 p-[4px]'/>
+                <ThumbsDown onClick={handleDisliked} className={`cursor-pointer ${status.dislike?'fill-white':''} ml-1 p-[4px]`}/>
               </div>
-              <div className='flex cursor-pointer items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
-                <Forward className='p-[4px] pl-0'/>
-                <span className='pr-[4px]'>Share</span>
+              <div onClick={handleWatch} className='flex cursor-pointer items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
+                <Bookmark className={`p-[4px] ${status.watch?'fill-white':''} pl-0`}/>
+                <span className='pr-[4px]'>{status.watch?'Saved':'Save'}</span>
               </div>
               <div onClick={handleDownload} className='flex cursor-pointer items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
-                <ArrowDownToLine className='p-[4px] pl-0'/>
-                <span className='pr-[4px]'>Download</span>
+                {status.download?<CircleCheck className='p-[2px] invert fill-black pl-0'/>:<ArrowDownToLine className='p-[4px] pl-0'/>}
+                <span className='pr-[4px]'>{status.download?'Downloaded':'Download'}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className='w-full my-4 line-clamp-2 '>
+      <div className='w-full my-6 line-clamp-2 '>
         {video?.description || video?.snippet.localized.description}
       </div>
     </div>

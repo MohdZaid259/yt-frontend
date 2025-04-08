@@ -3,23 +3,24 @@
 import useLocalStorage from "@/hooks/useLocalStorage"
 import { useEffect, useState } from "react"
 import { Play, Shuffle } from "lucide-react"
-import VideoItem from '@/components/VideoItem.jsx'
+import { VideoItem } from '@/components/VideoItem.jsx'
 
 export default function DownloadPage(){
-  const [setDownload, getDownload, removeDownload] = useLocalStorage('download', true)
+  const [setDownload, getDownload, removeDownload, removeAll] = useLocalStorage('download', true)
   const [data,setData] = useState([])
+  const [hasChanged,setHasChanged] = useState(false)
   
   useEffect(()=>{
     const res = getDownload()
     setData(res)
-  },[])
+  },[hasChanged])
 
   return (
     <div className="flex flex-col md:flex-row bg-black text-white min-h-screen">
     
     <div className="w-full md:w-[450px] p-4 md:p-6 bg-[#1d1c1c] rounded-lg">
-      <div className="relative w-full aspect-square md:aspect-auto md:h-[300px] mb-4 rounded-lg overflow-hidden">
-        <img src={data[0]?.video?.thumbnail} alt="Playlist thumbnail" className="object-cover" ></img>
+      <div className="relative w-full aspect-square md:aspect-auto mb-4 rounded-lg overflow-hidden">
+        {data.length>0 && <img src={data[0]?.video?.thumbnail} alt="Playlist thumbnail" className="object-cover" /> }
         <div className="mt-2">
           <h1 className="text-4xl font-bold mb-2">Downloads</h1>
           <p className="text-lg">{'zaidofficials259' || user?.username}</p>
@@ -43,19 +44,25 @@ export default function DownloadPage(){
       </div>
     </div>
 
-    <div className="flex-1 p-4">
-      <span className="font-semibold text-xl">Downloaded Vidoes</span>
+    <div className="flex-1 w-[500px] p-4">
+      <div className="flex justify-between items-center">
+        <span className="font-semibold text-xl">Downloaded Vidoes</span>
+        {data.length>0 && <button onClick={removeAll} className="bg-[#1d1c1c] -mt-2 -mr-2 py-2 px-4 rounded-full text-sm">Remove All</button>}
+      </div>
       <div className="space-y-3">
-        {data.map((item,i)=>{
+        {data && data.map((item,i)=>(
           <VideoItem
-            number={i}
+            setHasChanged={setHasChanged}
+            key={i}
+            type='download'
             thumbnail={item?.video?.thumbnail}
             title={item?.video?.title}
             channel={item?.owner?.fullname}
             views={item?.owner?.view}
             duration={item?.video?.duration}
           />
-        })}
+        ))}
+        {data.length==0 && <span className="text-sm text-gray-400">No Videos yet!</span>}
       </div>
     </div>
   </div>

@@ -18,14 +18,18 @@ function useLocalStorage(key, isArray=false) {
   const removeData = (value) => {
     if(isArray){
       let existingData = JSON.parse(window.localStorage.getItem(key)) || [];
-      existingData=existingData.filter((item)=>item.id!==value.id)
+      existingData = existingData.filter((item)=>item.video.title !== value)
       window.localStorage.setItem(key, JSON.stringify(existingData));
     }else{
       window.localStorage.removeItem(key);
     }
   };
 
-  return [setData, getData, removeData];
+  const removeAll = () => {
+    window.localStorage.removeItem(key);
+  };
+
+  return [setData, getData, removeData, removeAll];
 }
 
 export default useLocalStorage;
