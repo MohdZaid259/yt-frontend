@@ -59,8 +59,19 @@ export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, dat
   }
 })
 
-export const deleteVideo = createAsyncThunk('deleteVideo', async () => {
-
+export const deleteVideo = createAsyncThunk('deleteVideo', async (videoId) => {
+  try {
+      const res = await axios.delete(`${url}/video/${videoId}`,{
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true 
+      })
+      return res.data.data;
+  } catch (err) {
+      throw err
+  }
 })
 
 export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
@@ -78,10 +89,6 @@ export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
   }
 })
 
-export const togglePublish = createAsyncThunk('togglePublish', async () => {
-
-})
-
 export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
   try {
     const res = await axios.get(`${BASE_URL}/search`,{
@@ -92,7 +99,7 @@ export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
         videoDuration: "short",
         maxResults: 3,
         regionCode: "US", 
-        key: 'AIzaSyA4EoUq7Vrzy8VFleCPdGE2KsUvP0DwczE',
+        key: apiKey,
         pageToken: pageToken || undefined,
       }
     })
@@ -102,7 +109,7 @@ export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
         chart: "mostPopular",
         maxResults: 3,
         regionCode: "US", 
-        key: 'AIzaSyA4EoUq7Vrzy8VFleCPdGE2KsUvP0DwczE',
+        key: apiKey,
       },
     })
 
@@ -209,10 +216,6 @@ const videoSlice = createSlice({
       .addCase(getVideoById.fulfilled, (state, action) => {
         state.loading = false,
         state.video = action.payload
-      })
-      .addCase(togglePublish.fulfilled, (state) => {
-        state.loading = false,
-        state.publishToggle = !state.publishToggle
       })
       .addCase(searchVideoById.fulfilled, (state,action) => {
         state.loading = false,

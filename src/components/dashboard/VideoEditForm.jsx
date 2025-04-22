@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useDispatch,useSelector } from 'react-redux'
-import { getVideoById, updateVideo } from '@/store/slices/videoSlice.js'
+import { getVideoById, updateVideo, deleteVideo } from '@/store/slices/videoSlice.js'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function VideoEditForm({ videoId }) {
@@ -39,6 +39,12 @@ export function VideoEditForm({ videoId }) {
       [name]: files ? files[0] : value,
     }));
   };
+
+  const handleDelete = () => {
+    dispatch(deleteVideo(videoId))
+    router.back()
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { thumbnail, title, description } = formData
@@ -109,7 +115,10 @@ export function VideoEditForm({ videoId }) {
         <Button variant="outline" type="button" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button type="submit"> Save Changes </Button>
+        <div className="space-x-3">
+          <Button variant='destructive' type='button' onClick={handleDelete}>Delete</Button>
+          <Button type="submit"> Save Changes </Button>
+        </div>
       </div>
     </form>
   )
