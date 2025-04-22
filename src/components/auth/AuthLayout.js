@@ -10,6 +10,7 @@ const AuthLayout = ({ children }) => {
   const loading = useSelector((state)=> state.auth?.loading)
 
   useEffect(() => {
+    console.log('user',user)
     if (!loading && !user) {
       router.replace('/login');
     }

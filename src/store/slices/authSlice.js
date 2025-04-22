@@ -81,7 +81,7 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
     );    
     return res.data.data
   } catch (err) {
-    console.log(err)
+    throw err
   }
 })
 export const updateAvatar = createAsyncThunk("updateAvatar", async (data) => {
@@ -188,6 +188,7 @@ const authSlice=createSlice({
       .addCase(getCurrentUser.rejected,(state,action)=>{
         state.loading = false
         state.error = action.payload
+        state.isAuthenticated = false
       })
       .addCase(updateAvatar.fulfilled,(state)=>{
         state.loading = false

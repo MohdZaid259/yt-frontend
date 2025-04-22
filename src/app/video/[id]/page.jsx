@@ -6,7 +6,7 @@ async function VideoPage({params}) {
   const {id} = await params
 
   return (
-    <div className='flex'>
+    <div className='flex flex-col md:flex-row overflow-hidden'>
       <Video videoId={id}/>
       <VideoSidebar />
     </div>

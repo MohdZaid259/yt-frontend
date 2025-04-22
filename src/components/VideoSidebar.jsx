@@ -27,14 +27,14 @@ export default function Sidebar() {
   },[handler])
 
   return (
-    <aside className="space-y-6 w-3/5">
+    <aside className="space-y-6 md:w-3/5 w-full px-5">
       <div className="space-y-4 mt-5">
         <h2 className="font-semibold text-xl">Shorts</h2>
         <div className="flex justify-center">
           {data.shorts.map((item,i) => (
             <div onClick={()=>router.push(`/video/${item.id.videoId}`)} key={i} className="p-2 rounded-lg w-1/3">
               <img src={item.snippet.thumbnails.default.url} alt="shorts" className="h-32" />
-              <h3 className="mt-2 text-sm">{item.snippet.title}</h3>
+              <h3 className="mt-2 text-sm">{item.snippet.title.slice(0, 30) + "..."}</h3>
               <p className="text-xs text-gray-500">{item.snippet.channelTitle}</p>
             </div>
           ))}
@@ -46,7 +46,7 @@ export default function Sidebar() {
           <div onClick={()=>router.push(`/video/${item.id}`)} key={i} className="flex gap-2">
             <img src={item.snippet.thumbnails.default.url} alt="" className="scale-125 rounded-md"/>
             <div className="ml-5">
-              <h3 className="font-medium text-sm line-clamp-2">{item.snippet.title}</h3>
+              <h3 className="font-medium text-sm line-clamp-2">{item.snippet.title.slice(0, 50) + "..."}</h3>
               <p className="text-xs text-muted-foreground">{item.snippet.channelTitle}</p>
             </div>
           </div>

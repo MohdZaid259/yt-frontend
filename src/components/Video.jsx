@@ -3,7 +3,7 @@
 import { Bell, CircleCheck, ThumbsDown, Bookmark, ThumbsUp, ArrowDownToLine } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
-import { getVideoById, searchVideo } from '@/store/slices/videoSlice.js'
+import { getVideoById, searchVideoById } from '@/store/slices/videoSlice.js'
 import { getChannelProfile } from '@/store/slices/userSlice.js'
 import toast from 'react-hot-toast'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
@@ -31,7 +31,7 @@ function Video({videoId}) {
       const ownerData = await dispatch(getChannelProfile(ownerId))
       setOwner(ownerData.payload)
     }else{
-      await dispatch(searchVideo(videoId))
+      await dispatch(searchVideoById(videoId))
     }
   },[videoId,dispatch])
 
@@ -69,27 +69,27 @@ function Video({videoId}) {
 
   if(loading) return <>Loading...</>
   return (
-    <div className='flex flex-col w-[70%] pr-8 mt-5'>
+    <div className='flex flex-col w-full md:w-[70%] md:pr-8 px-5 mt-5'>
       <div className='w-full'>
-        {video?.videoFile && <video width="680" height="360" controls className='rounded-md'> <source src={video?.videoFile} type="video/mp4" /></video>}
-        {video?.id && <iframe width="680" height="360" src={`https://www.youtube.com/embed/${video?.id}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-md"/>}
+        {video?.videoFile && <video width="700" height="360" controls className='rounded-md'> <source src={video?.videoFile} type="video/mp4" /></video>}
+        {video?.id && <iframe width="700" height="360" src={`https://www.youtube.com/embed/${video?.id}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="rounded-md"/>}
         <div>
           <h1 className='my-3 mb-5 font-semibold text-xl'>{video?.title || video?.snippet.title}</h1>
           <div className='flex justify-between items-center'>
             <div className='flex items-start gap-6 '>
               <div className='flex text-sm'>
-                <img className='rounded-full h-10 border-white border aspect-square' src={owner?.avatar || video?.snippet?.thumbnails?.default?.url} alt="" />
+                <img className='rounded-full h-8 md:h-10 border-white border aspect-square' src={owner?.avatar || video?.snippet?.thumbnails?.default?.url} alt="" />
                 <div className='flex flex-col ml-3'>
                   <span className='font-semibold'>{owner?.fullname || video?.snippet?.channelTitle}</span>
                   <span className='text-zinc-400 text-xs'>{owner?.subscribersCount || 0} subsribers</span>
                 </div>
               </div>
-              <div onClick={handleSubscribe} className='flex px-2 pr-4 py-1 mt-1 cursor-pointer rounded-full items-center text-sm bg-zinc-800 hover:bg-zinc-700 max-w-max'>
+              <div onClick={handleSubscribe} className='hidden px-2 pr-4 py-1 mt-1 cursor-pointer sm:flex rounded-full items-center text-xs sm:text-sm bg-zinc-800 hover:bg-zinc-700 max-w-max'>
                 {status.subscribe?<Bell className='p-[4px] fill-white'/>:<Bell className='p-[4px]'/>}
                 {status.subscribe?'Subscribed':'Subscribe'}
               </div>
             </div>
-            <div className='flex gap-1 text-sm'>
+            <div className='flex gap-1 text-xs sm:text-sm'>
               <div className='flex items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
                 <ThumbsUp onClick={handleLiked} className={`cursor-pointer ${status.like?'fill-white':''} p-[4px]`}/>
                 <span className='mx-1 mr-2'>{video?.likes?.length || video?.statistics?.likeCount || 0}</span>
@@ -100,7 +100,7 @@ function Video({videoId}) {
                 <Bookmark className={`p-[4px] ${status.watch?'fill-white':''} pl-0`}/>
                 <span className='pr-[4px]'>{status.watch?'Saved':'Save'}</span>
               </div>
-              <div onClick={handleDownload} className='flex cursor-pointer items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
+              <div onClick={handleDownload} className='hidden sm:flex cursor-pointer items-center rounded-full bg-zinc-800 hover:bg-zinc-700 px-2 py-1'>
                 {status.download?<CircleCheck className='p-[2px] invert fill-black pl-0'/>:<ArrowDownToLine className='p-[4px] pl-0'/>}
                 <span className='pr-[4px]'>{status.download?'Downloaded':'Download'}</span>
               </div>

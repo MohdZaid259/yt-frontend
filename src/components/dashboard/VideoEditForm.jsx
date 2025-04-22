@@ -52,7 +52,7 @@ export function VideoEditForm({ videoId }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-6">
+    <form onSubmit={handleSubmit} className="m-4 mb-20">
       <Card>
         <CardHeader>
           <CardTitle>Video Details</CardTitle>

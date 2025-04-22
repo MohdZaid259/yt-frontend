@@ -6,11 +6,11 @@ function AuthInitializer() {
   const dispatch = useDispatch()
   
   useEffect(()=>{
-    function log(){
-      dispatch(getCurrentUser())
+    async function log(){
+      await dispatch(getCurrentUser())
     }
     log()
-  },[])
+  },[dispatch])
   
   return null
 }

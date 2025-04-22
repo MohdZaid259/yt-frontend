@@ -47,7 +47,7 @@ function LoginAccount() {
 
   if(loading) return <>Loading...</>
   return (
-    <div className="container absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-sm">
+    <div className="container scale-75 sm:scale-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-sm">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Welcome back</CardTitle>

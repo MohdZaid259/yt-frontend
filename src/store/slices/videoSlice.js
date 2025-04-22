@@ -44,7 +44,7 @@ export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, dat
   formData.append("title", data.title);
   formData.append("description", data.description);
   formData.append("thumbnail", data.thumbnail);
-console.log('inside slice')
+
   try {
       const res = await axios.patch(`${url}/video/${videoId}`, formData, {
         headers: {
@@ -82,7 +82,7 @@ export const togglePublish = createAsyncThunk('togglePublish', async () => {
 
 })
 
-export const getShorts = createAsyncThunk('getShorts', async () => {
+export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
   try {
     const res = await axios.get(`${BASE_URL}/search`,{
       params:{
@@ -92,7 +92,8 @@ export const getShorts = createAsyncThunk('getShorts', async () => {
         videoDuration: "short",
         maxResults: 3,
         regionCode: "US", 
-        key: apiKey,
+        key: 'AIzaSyA4EoUq7Vrzy8VFleCPdGE2KsUvP0DwczE',
+        pageToken: pageToken || undefined,
       }
     })
     const res2 = await axios.get(`${BASE_URL}/videos`, {
@@ -101,19 +102,22 @@ export const getShorts = createAsyncThunk('getShorts', async () => {
         chart: "mostPopular",
         maxResults: 3,
         regionCode: "US", 
-        key: apiKey,
+        key: 'AIzaSyA4EoUq7Vrzy8VFleCPdGE2KsUvP0DwczE',
       },
     })
+
     return {
       'shorts':res.data.items, 
+      'nextPageToken': res.data.nextPageToken,
       'videos':res2.data.items
     }
   } catch (err) {
+    console.log('err', err)
     console.log(err)
   }
 })
 
-export const searchVideo = createAsyncThunk('searchVideo', async (videoId) => {
+export const searchVideoById = createAsyncThunk('searchVideoById', async (videoId) => {
   try {
     const res = await axios.get(`${BASE_URL}/videos`, {
       params: {
@@ -122,7 +126,35 @@ export const searchVideo = createAsyncThunk('searchVideo', async (videoId) => {
         key: apiKey,
       }
     });
+    console.log('slice',res.data.items[0])
     return res.data.items[0]
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+export const searchVideoByQuery = createAsyncThunk('searchVideoByQuery', async ({query, maxResults=9}) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/search`,{
+      params: {
+        part: 'snippet',
+        q: query,
+        type: 'video',
+        maxResults,
+        key: apiKey,
+      }
+    })
+    const videos = res.data.items.map((item) => ({
+      videoId: item.id.videoId,
+      title: item.snippet.title,
+      description: item.snippet.description,
+      thumbnail: item.snippet.thumbnails.high.url,
+      avatar: item.snippet.thumbnails.high.url,
+      channelTitle: item.snippet.channelTitle,
+      publishedAt: item.snippet.publishedAt,
+    }))
+
+    return videos
   } catch (err) {
     console.log(err)
   }
@@ -149,7 +181,7 @@ const videoSlice = createSlice({
       })
       .addCase(getAllVideos.fulfilled, (state, action) => {
         state.loading = false,
-        state.videos = [...state.videos, ...action.payload]
+        state.videos = [...action.payload]
       })
       .addCase(publishVideo.pending, (state) => {
         state.loading = true
@@ -182,11 +214,18 @@ const videoSlice = createSlice({
         state.loading = false,
         state.publishToggle = !state.publishToggle
       })
-      .addCase(searchVideo.fulfilled, (state,action) => {
+      .addCase(searchVideoById.fulfilled, (state,action) => {
         state.loading = false,
         state.video = action.payload
       })
-      .addCase(searchVideo.pending, (state) => {
+      .addCase(searchVideoById.pending, (state) => {
+        state.loading = true
+      })
+      .addCase(searchVideoByQuery.fulfilled, (state,action) => {
+        state.loading = false,
+        state.videos = [...action.payload]
+      })
+      .addCase(searchVideoByQuery.pending, (state) => {
         state.loading = true
       })
   }
