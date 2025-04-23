@@ -8,10 +8,8 @@ import { getUserData, getUserVideos } from '@/store/slices/dashboardSlice.js'
 
 export default function DashboardPage() {
   const dispatch = useDispatch()
-  const loading = useSelector((state)=>state.dashboard.loading)
-  const data = useSelector((state)=>state.dashboard.data)
-  const videos = useSelector((state)=>state.dashboard.videos) || []
-
+  const {data, videos, loading} = useSelector((state)=>state.dashboard)
+  
   useEffect(()=>{
     dispatch(getUserData())
     dispatch(getUserVideos())

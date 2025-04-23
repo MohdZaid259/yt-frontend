@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import toast from "react-hot-toast";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -17,10 +16,8 @@ export const registerUser = createAsyncThunk('register', async (data) => {
 
   try {
     const res = await axios.post(`${url}/user/register`,formData)
-    toast.success('Registered successfully!!')
-    return res.data
+    return res.data.data
   } catch (err) {
-    toast.error(err?.response?.data?.message)
     throw err
   }
 })
@@ -29,17 +26,14 @@ export const loginUser = createAsyncThunk('login', async (data) => {
     const res = await axios.post(`${url}/user/login`,data,{withCredentials:true})
     const accessToken = res.data.data.accessToken
     const refreshToken = res.data.data.refreshToken
-    toast.success('LoggedIn successfully!!')
     return { 'user':res.data.data.user, accessToken, refreshToken }
   } catch (err) {
-    toast.error(err?.response?.data?.message);
     throw err
   }
 })
 export const refreshToken = createAsyncThunk('refreshToken', async ()=>{
   try {
     const res = await axios.post(`${url}/user/refresh-token`)
-    console.log(res.data)
     return res.data
   } catch (err) {
     throw err
@@ -48,20 +42,16 @@ export const refreshToken = createAsyncThunk('refreshToken', async ()=>{
 export const logoutUser = createAsyncThunk('logout', async () => {
   try {
     await axios.post(`${url}/user/logout`,{},{withCredentials:true})
-    toast.success('Logged Out!!')
   } catch (err) {
-    toast.error(err?.response?.data?.message)
     throw err
   }
 })
 export const changePassword = createAsyncThunk('changePassword', async (data) => {
   try {
     const res = await axios.post(`${url}/user/change-password`,data)
-    toast.success('Password changed!!')
     console.log(res.data)
     return res.data
   } catch (err) {
-    toast.error(err?.response?.data?.message);
     throw err
   }
 })
@@ -87,30 +77,24 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
 export const updateAvatar = createAsyncThunk("updateAvatar", async (data) => {
   try {
     const res = await axios.post(`${url}/user/update-avatar`,data)
-    toast.success('Avatar Updated!!')
     return res.data
   } catch (err) {
-    toast.error(err?.response?.data?.message);
     throw err
   }
 })
 export const updateCoverImg = createAsyncThunk("updateCoverImg", async (data) => {
   try {
     const res = await axios.post(`${url}/user/update-cover-image`,data)
-    toast.success('CoverImage Updated!!')
     return res.data
   } catch (err) {
-    toast.error(err?.response?.data?.message);
     throw err
   }
 })
 export const updateUserDetails = createAsyncThunk("updateUserDetails", async (data) => {
   try {
     const res = await axios.post(`${url}/user/update-account`,data)
-    toast.success('User details updated!!')
     return res.data
   } catch (err) {
-    toast.error(err?.response?.data?.message);
     throw err
   }
 })
@@ -148,9 +132,9 @@ const authSlice=createSlice({
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state,action) => {
         state.loading = false
-        state.user = action.payload?.user
+        state.user = action.payload
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.payload;

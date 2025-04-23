@@ -5,31 +5,27 @@ import { SidebarContext } from '@/contexts/sidebarContext.jsx';
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from "next/navigation";
 import Skeleton from "@/components/Skeleton.jsx";
-import { getAllVideos } from '@/store/slices/videoSlice.js'
-import makeVidoesNull from '@/store/slices/videoSlice.js'
+import { getAllVideos, incrementIndex } from '@/store/slices/videoSlice.js'
 
 function HomePage() {
   const {isOpen} = useContext(SidebarContext) 
   const router = useRouter()
   const dispatch = useDispatch()
-  const videos = useSelector((state)=>state.video.videos)
-  const loading = useSelector((state)=>state.video.loading)
-    
-  const handler = useCallback( () => {
-    dispatch(getAllVideos())
-    
-    return ()=> dispatch(makeVidoesNull())
-  },[])
-
-  useEffect(()=>{
-    handler()
-  },[handler])
+  const {videos, loading, index} = useSelector((state)=>state.video)
   
+  useEffect(() => {
+    if (!loading) {
+      dispatch(getAllVideos(index)).then(() => {
+        dispatch(incrementIndex());
+      });
+    }
+  }, [dispatch, index, loading]);
+
   if (loading) return <Skeleton />;
   return (
     <div className="px-4">
       <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4 ${isOpen ? 'pt-2' : 'pt-4'} w-full`}>
-        {videos?.map((item, i) => {
+        {(videos.length>0) && videos.map((item, i) => {
           const itemId = item._id || item.videoId;
           return (
             <div

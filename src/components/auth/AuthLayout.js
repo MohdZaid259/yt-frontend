@@ -6,18 +6,17 @@ import { useSelector } from 'react-redux';
 
 const AuthLayout = ({ children }) => {
   const router = useRouter();
-  const user = useSelector((state)=> state.auth?.isAuthenticated)
-  const loading = useSelector((state)=> state.auth?.loading)
+  const {isAuthenticated,loading} = useSelector((state)=> state.auth)
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !isAuthenticated) {
       router.replace('/login');
     }
-  }, [user, loading, router]);
+  }, [isAuthenticated, loading, router]);
 
   if (loading) return <p>Loading...</p>
 
-  return user ? <>{children}</> : null
+  return isAuthenticated ? <>{children}</> : null
 };
 
 export default AuthLayout;

@@ -33,18 +33,18 @@ export default function Sidebar() {
         <div className="flex justify-center">
           {data.shorts.map((item,i) => (
             <div onClick={()=>router.push(`/video/${item.id.videoId}`)} key={i} className="p-2 rounded-lg w-1/3">
-              <img src={item.snippet.thumbnails.default.url} alt="shorts" className="h-32" />
+              <img src={item.snippet.thumbnails.default.url} alt="shorts" className="h-32 object-cover rounded-md" />
               <h3 className="mt-2 text-sm">{item.snippet.title.slice(0, 30) + "..."}</h3>
               <p className="text-xs text-gray-500">{item.snippet.channelTitle}</p>
             </div>
           ))}
         </div>
       </div>
-      <div className="space-y-4 ml-5">
-      <h2 className="font-semibold -ml-5 my-5 text-xl">Recommendations</h2>
+      <div className="space-y-4 ">
+      <h2 className="font-semibold  my-5 text-xl">Recommendations</h2>
         {data.videos.map((item, i) => (
           <div onClick={()=>router.push(`/video/${item.id}`)} key={i} className="flex gap-2">
-            <img src={item.snippet.thumbnails.default.url} alt="" className="scale-125 rounded-md"/>
+            <img src={item.snippet.thumbnails.default.url} alt="" className="scale-110 rounded-md aspect-video"/>
             <div className="ml-5">
               <h3 className="font-medium text-sm line-clamp-2">{item.snippet.title.slice(0, 50) + "..."}</h3>
               <p className="text-xs text-muted-foreground">{item.snippet.channelTitle}</p>

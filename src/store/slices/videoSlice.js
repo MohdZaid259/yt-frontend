@@ -5,10 +5,14 @@ const url = process.env.NEXT_PUBLIC_BASE_URL;
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
 
-export const getAllVideos = createAsyncThunk('getAllVideos', async () => {
+export const getAllVideos = createAsyncThunk('getAllVideos', async (index,{rejectWithValue}) => {
   try {
-    const res = await axios.get(`${url}/video`)
-    return res.data.data
+    const res = await axios.get(`${url}/video?skip=${index}`)
+    const video = res.data.data[0]
+    
+    if(!video) return rejectWithValue('No more videos!')
+
+    return video
   } catch (err) {
     throw err
   }
@@ -31,7 +35,6 @@ export const publishVideo = createAsyncThunk('publishVideo', async (data) => {
         },
         withCredentials: true 
       });
-      toast.success('Video Uploaded!!')
       return res.data.data
   } catch (err) {
       throw err
@@ -54,7 +57,6 @@ export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, dat
         },
         withCredentials: true 
       });
-      toast.success('Video Updated!!');
       return res.data.data
   } catch (err) {
       throw err
@@ -81,21 +83,14 @@ export const deleteVideo = createAsyncThunk('deleteVideo', async (videoId) => {
 
 export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
   try {
-    const accessToken = window.sessionStorage.getItem('access');
-    if(!accessToken) throw new Error('Access token not found!')
-      
-    const res = await axios.get(`${url}/video/${data}`,{
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true 
-    })
+    const res = await axios.get(`${url}/video/${data}`)
     return res.data.data
   } catch (err) {
+    console.log('err',err)
     throw err
   }
 })
+
 
 export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
   try {
@@ -127,7 +122,6 @@ export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
       'videos':res2.data.items
     }
   } catch (err) {
-    console.log('err', err)
     console.log(err)
   }
 })
@@ -141,7 +135,6 @@ export const searchVideoById = createAsyncThunk('searchVideoById', async (videoI
         key: apiKey,
       }
     });
-    console.log('slice',res.data.items[0])
     return res.data.items[0]
   } catch (err) {
     console.log(err)
@@ -182,10 +175,14 @@ const videoSlice = createSlice({
     video:null,
     videos:[],
     uploaded:false,
-    publishToggle:false
+    publishToggle:false,
+    index:0
   },
   reducers:{
-    makeVideosNull: (state) => {
+    incrementIndex(state) {
+      state.index += 1;
+    },
+    clearVideos: (state) => {
       state.videos = []
     }
   },
@@ -196,7 +193,7 @@ const videoSlice = createSlice({
       })
       .addCase(getAllVideos.fulfilled, (state, action) => {
         state.loading = false,
-        state.videos = [...action.payload]
+        state.videos.push(action.payload)
       })
       .addCase(publishVideo.pending, (state) => {
         state.loading = true
@@ -242,4 +239,5 @@ const videoSlice = createSlice({
   }
 })
 
+export const { incrementIndex, clearVideos } = videoSlice.actions;
 export default videoSlice.reducer

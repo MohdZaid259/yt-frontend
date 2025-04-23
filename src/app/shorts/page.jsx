@@ -53,7 +53,7 @@ function Page() {
   return (
     <>
       {shorts.length > 0 && (
-        <div className="relative h-[90vh] w-full max-w-md mx-auto overflow-hidden">
+        <div className="relative h-[90vh] w-full max-w-md mx-auto overflow-hidden p-4 sm:p-0">
           <div className="h-full w-full bg-gradient-to-b from-black/90 to-white/20 flex items-center justify-center">
             <iframe
               src={`https://www.youtube.com/embed/${currentShort?.videoId}`}
@@ -62,7 +62,7 @@ function Page() {
             />
           </div>
 
-          <div className="absolute right-4 bottom-4 flex flex-col items-center gap-10">
+          <div className="absolute right-4 bottom-12 md:bottom-4 flex flex-col items-center gap-10">
             <ActionButton
               icon={Heart}
               label="Like"

@@ -5,14 +5,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
 import { getVideoById, searchVideoById } from '@/store/slices/videoSlice.js'
 import { getChannelProfile, updateWatchHistory } from '@/store/slices/userSlice.js'
-import toast from 'react-hot-toast'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 
 function Video({videoId}) {
   const dispatch = useDispatch()
   const [owner,setOwner] = useState()
-  const video = useSelector((state)=>state.video.video)
-  const loading = useSelector((state)=>state.video.loading)
+  const {video,loading} = useSelector((state)=>state.video)
   const [status, setStatus] = useState({
     subscribe:false,
     download: false,
@@ -42,30 +40,25 @@ function Video({videoId}) {
 
   function handleSubscribe(){
     setStatus(prev => ({ ...prev, subscribe: !prev.subscribe }))
-    toast.success('Subscribed!!')
   }
 
   function handleDownload(){
     setStatus(prev => ({ ...prev, download: !prev.download }))
     setDownload({ video, owner })
-    toast.success('Video Downloading...')
   }
 
   function handleLiked(){
     setStatus(prev => ({ ...prev, like: !prev.like }))
     setLiked({ video, owner })
-    toast.success('Video Liked!')
   }
 
   function handleDisliked(){
     setStatus(prev=> ({ ...prev, dislike: !prev.dislike }))
-    toast.success('VideoDisliked!')
   }
   
   function handleWatch(){
     setStatus(prev => ({ ...prev, watch: !prev.watch }))
     setWatch({ video, owner })
-    toast.success('Video Saved!')
   }
 
   if(loading) return <>Loading...</>
