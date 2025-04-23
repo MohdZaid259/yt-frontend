@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import useSessionStorage from "@/hooks/useSessionStorage";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
-const accessToken = getAccessToken()
-
 export const getUserData = createAsyncThunk('getUserData',async () => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/dashboard/stats`,{
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -24,6 +23,9 @@ export const getUserData = createAsyncThunk('getUserData',async () => {
 
 export const getUserVideos = createAsyncThunk('getUserVideos',async () => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/dashboard/videos`,{
       headers: {
         'Authorization': `Bearer ${accessToken}`,

@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import useSessionStorage from "@/hooks/useSessionStorage";
 import axios from "axios";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 
-const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
-const accessToken = getAccessToken()
-
 export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (data) => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     await axios.patch(`${url}/user/update-watchHistory/${data}`,{},
       {
         headers: {
@@ -26,6 +25,9 @@ export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (
 
 export const getChannelProfile = createAsyncThunk('getChannelProfile', async (data) => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/user/channel/${data}`,
       {
         headers: {
@@ -42,6 +44,9 @@ export const getChannelProfile = createAsyncThunk('getChannelProfile', async (da
 
 export const watchHistory = createAsyncThunk('watchHistory', async () => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/user/history`,
       {
         headers: {

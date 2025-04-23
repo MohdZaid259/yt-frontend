@@ -1,13 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import useSessionStorage from "@/hooks/useSessionStorage";
 
 const url = process.env.NEXT_PUBLIC_BASE_URL;
 const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 const BASE_URL = "https://www.googleapis.com/youtube/v3";
-
-const [setAccessToken,getAccessToken,removeAccessToken] = useSessionStorage('access')
-const accessToken = getAccessToken()
 
 export const getAllVideos = createAsyncThunk('getAllVideos', async () => {
   try {
@@ -25,6 +21,9 @@ export const publishVideo = createAsyncThunk('publishVideo', async (data) => {
   formData.append("videoFile", data.video);
   formData.append("thumbnail", data.thumbnail);
 
+  const accessToken = window.sessionStorage.getItem('access');
+  if(!accessToken) throw new Error('Access token not found!')
+      
   try {
       const res = await axios.post(`${url}/video/upload-video`, formData, {
         headers: {
@@ -45,6 +44,9 @@ export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, dat
   formData.append("description", data.description);
   formData.append("thumbnail", data.thumbnail);
 
+  const accessToken = window.sessionStorage.getItem('access');
+  if(!accessToken) throw new Error('Access token not found!')
+      
   try {
       const res = await axios.patch(`${url}/video/${videoId}`, formData, {
         headers: {
@@ -61,6 +63,9 @@ export const updateVideo = createAsyncThunk('updateVideo', async ({ videoId, dat
 
 export const deleteVideo = createAsyncThunk('deleteVideo', async (videoId) => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
       const res = await axios.delete(`${url}/video/${videoId}`,{
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -76,6 +81,9 @@ export const deleteVideo = createAsyncThunk('deleteVideo', async (videoId) => {
 
 export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
   try {
+    const accessToken = window.sessionStorage.getItem('access');
+    if(!accessToken) throw new Error('Access token not found!')
+      
     const res = await axios.get(`${url}/video/${data}`,{
       headers: {
         'Authorization': `Bearer ${accessToken}`,
