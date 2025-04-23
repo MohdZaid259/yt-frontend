@@ -4,24 +4,37 @@ import React from 'react'
 import { useEffect, useState } from "react"
 import { Play, Shuffle } from "lucide-react"
 import { VideoItem } from '@/components/VideoItem.jsx'
+import { watchHistory } from '@/store/slices/userSlice.js'
+import useLocalStorage from '@/hooks/useLocalStorage.jsx'
+import { useDispatch, useSelector } from 'react-redux'
+
+//disptach & selector
 
 function page() {
+  const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
   const [data,setData] = useState([])
-  const [hasChanged,setHasChanged] = useState(false)
+  const [user,setUser] = useState('')
+  const dispatch = useDispatch()
 
   useEffect(()=>{
-    
-  },[hasChanged])
+    setUser(getAuth())
+
+    async function log(){
+      const data = await dispatch(watchHistory())
+      setData(data.payload)
+    }
+    log()
+  },[])
 
   return (
     <div className="flex flex-col rounded-lg  md:flex-row bg-black text-white min-h-screen">
 
     <div className="w-full md:w-[450px] p-4 lg:p-6 mx-auto bg-gradient-to-b from-black/90 to-white/10 rounded-lg">
       <div className="relative w-full aspect-auto mb-4 rounded-lg overflow-hidden">
-      {data.length>0 && <img src={data[0]?.video?.thumbnail} alt="Playlist thumbnail" className="object-cover w-full aspect-video" /> }
+      {data && <img src={data[0]?.thumbnail} alt="Playlist thumbnail" className="object-cover w-full rounded aspect-video" /> }
         <div className="mt-2">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Your History</h1>
-          <p className="text-sm sm:text-base lg:text-lg">{'zaidofficials259' || user?.username}</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold m-4 ml-0">Your History</h1>
+          <p className="text-sm sm:text-base lg:text-lg">{user?.username || 'zaidofficials259'}</p>
           <div className="flex items-center gap-2 text-gray-300 mt-1 text-xs sm:text-sm lg:text-base">
             <span>220 videos</span>
             <span>•</span>
@@ -43,24 +56,22 @@ function page() {
     </div>
 
     <div className="flex-1 w-full lg:w-[500px] p-4">
-      <div className="flex justify-between items-center">
-        <span className="font-semibold text-lg sm:text-xl">Your History</span>
-        {data.length>0 && <button onClick={removeAll} className="bg-[#1d1c1c] py-2 px-4 rounded-full text-xs sm:text-sm">Remove All</button>}
-      </div>
+      <span className="font-semibold text-lg sm:text-xl">Your History</span>
+      <span className='text-xs text-gray-500 block'>History is unalterable</span>
       <div className="space-y-3">
         {data && data.map((item,i)=>{
           return <VideoItem
-            setHasChanged={setHasChanged}
+            setHasChanged={''}
             key={i}
-            type='History'
-            thumbnail={item?.video?.thumbnail}
-            title={item?.video?.title}
-            channel={item?.owner?.fullname}
-            views={item?.owner?.view}
-            duration={item?.video?.duration}
+            type='history'
+            thumbnail={item?.thumbnail}
+            title={item?.title}
+            channel={item?.fullname}
+            views={item?.view}
+            duration={item?.duration}
           />
         })}
-        {data.length==0 && <span className="text-sm sm:text-base text-gray-400">No Videos yet!</span>}
+        {!data && <span className="text-sm sm:text-base text-gray-400">No Videos yet!</span>}
       </div>
     </div>
   </div>

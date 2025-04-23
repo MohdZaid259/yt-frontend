@@ -6,11 +6,15 @@ import { Play, Shuffle } from "lucide-react"
 import { VideoItem } from '@/components/VideoItem.jsx'
 
 export default function DownloadPage(){
+  const [setAuth,getAuth,removeAuth] = useLocalStorage('auth')
   const [setDownload, getDownload, removeDownload, removeAll] = useLocalStorage('download', true)
   const [data,setData] = useState([])
+  const [user,setUser] = useState('')
   const [hasChanged,setHasChanged] = useState(false)
   
   useEffect(()=>{
+    setUser(getAuth())
+    
     const res = getDownload()
     setData(res)
   },[hasChanged])
@@ -23,7 +27,7 @@ export default function DownloadPage(){
         {data.length>0 && <img src={data[0]?.video?.thumbnail} alt="Playlist thumbnail" className="object-cover w-full aspect-video" /> }
         <div className="mt-2">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Downloads</h1>
-          <p className="text-sm sm:text-base lg:text-lg">{'zaidofficials259' || user?.username}</p>
+          <p className="text-sm sm:text-base lg:text-lg">{user?.username || 'zaidofficials259'}</p>
           <div className="flex items-center gap-2 text-gray-300 mt-1 text-xs sm:text-sm lg:text-base">
             <span>220 videos</span>
             <span>•</span>

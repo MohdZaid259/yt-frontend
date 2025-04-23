@@ -9,10 +9,17 @@ const accessToken = getAccessToken()
 
 export const updateWatchHistory = createAsyncThunk('updateWatchHistory', async (data) => {
   try {
-    const res = await axios.patch(`${url}/user/update-watch-history`,data)
-    console.log(res.data)
-    return res.data
+    await axios.patch(`${url}/user/update-watchHistory/${data}`,{},
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true 
+      }
+    )
   } catch (err) {
+    console.log(err)
     throw err
   }
 })
@@ -35,9 +42,16 @@ export const getChannelProfile = createAsyncThunk('getChannelProfile', async (da
 
 export const watchHistory = createAsyncThunk('watchHistory', async () => {
   try {
-    const res = await axios.get(`${url}/user/watch-history`)
-    console.log(res.data)
-    return res.data
+    const res = await axios.get(`${url}/user/history`,
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true 
+      }
+    )
+    return res.data.data
   } catch (err) {
     throw err
   }
@@ -58,7 +72,6 @@ const userSlice = createSlice({
       })
       .addCase(updateWatchHistory.fulfilled, (state, action) => {
         state.loading = false;
-        state.history = action.payload;
       })
       .addCase(getChannelProfile.pending, (state) => {
         state.loading = true;

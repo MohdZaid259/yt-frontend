@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home, Film, LayoutDashboard, ArrowDownToLine, History, ListVideo,
-  Video, Clock, ThumbsUp, CircleUser
+  Video, Clock, ThumbsUp, CircleUser, CirclePlus,
+  icons
 } from "lucide-react";
 import { SidebarContext } from '@/contexts/sidebarContext';
 
@@ -36,7 +37,8 @@ const compactSidebarLinks = [
 const mobileNavLinks = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/shorts', label: 'Shorts', icon: Film },
-  { href: '/auth/watchLater', label: 'Watch Later', icon: Clock },
+  { href: '/auth/dashboard/upload', label: 'Add', icon: CirclePlus},
+  { href: '/auth/watchLater', label: 'Saved', icon: Clock },
   { href: '/auth/dashboard', label: 'Dashboard', icon: LayoutDashboard },
 ];
 
@@ -99,8 +101,9 @@ function Sidebar() {
         const active = isActive(item.href);
         return (
           <Link key={item.href} href={item.href} className={`flex flex-col items-center text-xs ${active ? 'text-white' : 'text-zinc-400'}`}>
-            <Icon size={20} />
-            <span>{item.label}</span>
+            {(item.label=='Add') && <Icon size={30} />}
+            {!(item.label=='Add') && <Icon size={20} />}
+            {!(item.label=='Add') && <span>{item.label}</span>}
           </Link>
         );
       })}

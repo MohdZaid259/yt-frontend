@@ -4,7 +4,7 @@ import { Bell, CircleCheck, ThumbsDown, Bookmark, ThumbsUp, ArrowDownToLine } fr
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch,useSelector } from 'react-redux'
 import { getVideoById, searchVideoById } from '@/store/slices/videoSlice.js'
-import { getChannelProfile } from '@/store/slices/userSlice.js'
+import { getChannelProfile, updateWatchHistory } from '@/store/slices/userSlice.js'
 import toast from 'react-hot-toast'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
 
@@ -33,6 +33,7 @@ function Video({videoId}) {
     }else{
       await dispatch(searchVideoById(videoId))
     }
+    dispatch(updateWatchHistory(videoId))
   },[videoId,dispatch])
 
   useEffect(()=>{

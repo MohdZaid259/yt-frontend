@@ -88,7 +88,6 @@ export const updateAvatar = createAsyncThunk("updateAvatar", async (data) => {
   try {
     const res = await axios.post(`${url}/user/update-avatar`,data)
     toast.success('Avatar Updated!!')
-    console.log(res.data)
     return res.data
   } catch (err) {
     toast.error(err?.response?.data?.message);
@@ -99,7 +98,6 @@ export const updateCoverImg = createAsyncThunk("updateCoverImg", async (data) =>
   try {
     const res = await axios.post(`${url}/user/update-cover-image`,data)
     toast.success('CoverImage Updated!!')
-    console.log(res.data)
     return res.data
   } catch (err) {
     toast.error(err?.response?.data?.message);
@@ -110,7 +108,6 @@ export const updateUserDetails = createAsyncThunk("updateUserDetails", async (da
   try {
     const res = await axios.post(`${url}/user/update-account`,data)
     toast.success('User details updated!!')
-    console.log(res.data)
     return res.data
   } catch (err) {
     toast.error(err?.response?.data?.message);

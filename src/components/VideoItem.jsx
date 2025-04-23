@@ -31,7 +31,7 @@ export function VideoItem({setHasChanged, type='', thumbnail='sample thumbnail',
           <span className="mx-1"> views</span>
         </div>
       </div>
-      <button onClick={handleDelete} className="bg-[#1d1c1c] -mt-2 -mr-2 py-2 px-4 rounded-full text-sm"> <Delete  className="w-5 h-5"/></button>
+      {!(type=='history') && <button onClick={handleDelete} className="bg-[#1d1c1c] -mt-2 -mr-2 py-2 px-4 rounded-full text-sm"> <Delete  className="w-5 h-5"/></button>}
     </div>
   )
 }
