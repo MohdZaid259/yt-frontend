@@ -39,7 +39,7 @@ const mobileNavLinks = [
   { href: '/shorts', label: 'Shorts', icon: Film },
   { href: '/auth/dashboard/upload', label: 'Add', icon: CirclePlus},
   { href: '/auth/watchLater', label: 'Saved', icon: Clock },
-  { href: '/auth/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/auth/dashboard', label: 'Desk', icon: LayoutDashboard },
 ];
 
 function Sidebar() {
