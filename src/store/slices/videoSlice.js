@@ -91,7 +91,6 @@ export const getVideoById = createAsyncThunk('getVideoById', async (data) => {
   }
 })
 
-
 export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
   try {
     const res = await axios.get(`${BASE_URL}/search`,{
@@ -176,7 +175,8 @@ const videoSlice = createSlice({
     videos:[],
     uploaded:false,
     publishToggle:false,
-    index:0
+    index:0,
+    stopFetching: false
   },
   reducers:{
     incrementIndex(state) {
@@ -194,6 +194,12 @@ const videoSlice = createSlice({
       .addCase(getAllVideos.fulfilled, (state, action) => {
         state.loading = false,
         state.videos.push(action.payload)
+      })
+      .addCase(getAllVideos.rejected, (state, action) => {
+        state.loading = false
+        if (action.payload == 'No more videos!') {
+          state.stopFetching = true;
+        }
       })
       .addCase(publishVideo.pending, (state) => {
         state.loading = true

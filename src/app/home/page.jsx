@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useCallback } from "react";
+import { act, useContext, useEffect } from "react";
 import { SidebarContext } from '@/contexts/sidebarContext.jsx';
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from "next/navigation";
@@ -11,17 +11,18 @@ function HomePage() {
   const {isOpen} = useContext(SidebarContext) 
   const router = useRouter()
   const dispatch = useDispatch()
-  const {videos, loading, index} = useSelector((state)=>state.video)
+  const {videos, loading, index, stopFetching } = useSelector((state)=>state.video)
   
   useEffect(() => {
-    if (!loading) {
-      dispatch(getAllVideos(index)).then(() => {
-        dispatch(incrementIndex());
+    if (!loading && !stopFetching) {
+      dispatch(getAllVideos(index)).then((action) => {
+        if(action?.type == 'getAllVideos/fulfilled')
+          dispatch(incrementIndex());
       });
     }
-  }, [dispatch, index, loading]);
+  }, [dispatch, index, stopFetching]);
 
-  if (loading) return <Skeleton />;
+  if (loading && videos.length == 0) return <Skeleton />;
   return (
     <div className="px-4">
       <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4 ${isOpen ? 'pt-2' : 'pt-4'} w-full`}>
