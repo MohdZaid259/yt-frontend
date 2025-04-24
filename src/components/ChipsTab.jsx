@@ -18,7 +18,7 @@ function ChipsTab() {
   }
 
   return(
-    <div className='mx-4 mr-4 md:mr-10 my-2 flex gap-3 whitespace-nowrap overflow-x-hidden'>
+    <div className='mx-4 mr-4 md:mr-10 my-2 flex gap-3 whitespace-nowrap overflow-x-scroll hide-scrollbar'>
       {chipData.map((item,i)=> <div onClick={()=>handleChip(item)} key={i}><Chip props={item}/></div>)}
     </div>
   )

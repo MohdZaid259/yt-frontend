@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, Upload } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import LoadingLine from "../../components/Loading.jsx"
 
 function CreateAccount() {
   const { handleSubmit, register, setValue, watch, formState:{ errors } } = useForm()
@@ -27,9 +28,9 @@ function CreateAccount() {
     return
   }
 
-  if(loading) return <>Loading...</>
+  if(loading) return <LoadingLine/>
   return (
-    <div className="container scale-75 sm:scale-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-xl">
+    <div className="container scale-90 sm:scale-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-xl">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Create your account</CardTitle>

@@ -3,8 +3,10 @@
 import React from 'react'
 import { Delete } from "lucide-react"
 import useLocalStorage from "@/hooks/useLocalStorage"
+import { useRouter } from 'next/navigation'
 
-export function VideoItem({setHasChanged, type='', thumbnail='sample thumbnail', title='sample title', channel='sample channel', views=0, duration=0 }) {
+export function VideoItem({setHasChanged, videoId='', type='', thumbnail='sample thumbnail', title='sample title', channel='sample channel', views=0, duration=0 }) {
+  const router = useRouter()
   const [setDownload, getDownload, removeDownload] = useLocalStorage('download', true)
   const [setWatch, getWatch, removeWatch] = useLocalStorage('watchLater',true)
   const [setLiked, getLiked, removeLiked] = useLocalStorage('likedVideo',true)
@@ -18,7 +20,7 @@ export function VideoItem({setHasChanged, type='', thumbnail='sample thumbnail',
   }
 
   return (
-    <div className="flex mt-5 bg-[#1d1c1c] justify-center items-start p-2 rounded-lg gap-3">
+    <div onClick={() => router.push(`/video/${videoId}`)} className="flex mt-5 bg-[#1d1c1c] justify-center items-start p-2 rounded-lg gap-3">
       <div className="relative min-w-[160px] w-[160px] h-[90px] rounded-sm overflow-hidden">
         <img src={thumbnail || "/placeholder.svg"} alt={title} className="object-cover"></img>
         <div className="absolute bottom-1 right-1 bg-black bg-opacity-80 px-1 text-xs rounded">{Number(duration).toFixed(2)}</div>

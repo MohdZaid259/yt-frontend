@@ -17,8 +17,8 @@ export default function Sidebar() {
     const res = await dispatch(getShorts())
     setData((prev)=>({
       ...prev,
-      shorts:res.payload.shorts,
-      videos:res.payload.videos
+      shorts:res?.payload?.shorts,
+      videos:res?.payload?.videos
     }))  
   },[])
 
@@ -26,12 +26,13 @@ export default function Sidebar() {
     handler()
   },[handler])
 
+  if(!data?.shorts || !data?.videos) return <div className='text-gray-500 text-sm p-4'>Request Limit exceeded. Server will take some time to cool down.</div>
   return (
     <aside className="space-y-6 md:w-3/5 w-full px-5">
       <div className="space-y-4 mt-5">
         <h2 className="font-semibold text-xl">Shorts</h2>
         <div className="flex justify-center">
-          {data.shorts.map((item,i) => (
+          { data?.shorts && data?.shorts?.map((item,i) => (
             <div onClick={()=>router.push(`/video/${item.id.videoId}`)} key={i} className="p-2 rounded-lg w-1/3">
               <img src={item.snippet.thumbnails.default.url} alt="shorts" className="h-32 object-cover rounded-md" />
               <h3 className="mt-2 text-sm">{item.snippet.title.slice(0, 30) + "..."}</h3>
@@ -42,7 +43,7 @@ export default function Sidebar() {
       </div>
       <div className="space-y-4 ">
       <h2 className="font-semibold  my-5 text-xl">Recommendations</h2>
-        {data.videos.map((item, i) => (
+        {data?.videos && data?.videos?.map((item, i) => (
           <div onClick={()=>router.push(`/video/${item.id}`)} key={i} className="flex gap-2">
             <img src={item.snippet.thumbnails.default.url} alt="" className="scale-110 rounded-md aspect-video"/>
             <div className="ml-5">

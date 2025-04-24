@@ -109,7 +109,7 @@ export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
       params: {
         part: "snippet",
         chart: "mostPopular",
-        maxResults: 3,
+        maxResults: 5,
         regionCode: "US", 
         key: apiKey,
       },
@@ -122,6 +122,7 @@ export const getShorts = createAsyncThunk('getShorts', async (pageToken) => {
     }
   } catch (err) {
     console.log(err)
+    throw err
   }
 })
 
@@ -137,6 +138,7 @@ export const searchVideoById = createAsyncThunk('searchVideoById', async (videoI
     return res.data.items[0]
   } catch (err) {
     console.log(err)
+    throw err
   }
 })
 
@@ -164,6 +166,7 @@ export const searchVideoByQuery = createAsyncThunk('searchVideoByQuery', async (
     return videos
   } catch (err) {
     console.log(err)
+    throw err
   }
 })
 

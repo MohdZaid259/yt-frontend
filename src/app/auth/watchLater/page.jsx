@@ -60,6 +60,7 @@ function page() {
             setHasChanged={setHasChanged}
             key={i}
             type='watchLater'
+            videoId={item?.video?._id}
             thumbnail={item?.video?.thumbnail}
             title={item?.video?.title}
             channel={item?.owner?.fullname}

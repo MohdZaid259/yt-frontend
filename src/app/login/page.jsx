@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
+import LoadingLine from '../../components/Loading'
 
 function LoginAccount() {
   const { handleSubmit, register, formState:{ errors } } = useForm()
@@ -45,9 +46,9 @@ function LoginAccount() {
     }
   }
 
-  if(loading) return <>Loading...</>
+  if(loading) return <LoadingLine/>
   return (
-    <div className="container scale-75 sm:scale-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-sm">
+    <div className="container scale-90 sm:scale-100 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-sm">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Welcome back</CardTitle>

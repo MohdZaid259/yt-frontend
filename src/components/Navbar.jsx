@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useCallback, useEffect, useContext } from 'react';
-import { Bell, Menu, Video, Search, CircleUser } from 'lucide-react';
+import { Menu, Video, Search, CircleUser } from 'lucide-react';
 import { SidebarContext } from '@/contexts/sidebarContext';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
@@ -18,8 +18,8 @@ function Navbar() {
   const user = useSelector((state)=>state.auth.user)
 
   const handler = useCallback(
-    debounce( async (value) => {
-      await dispatch(searchVideoByQuery(value))
+    debounce((value) => {
+      dispatch(searchVideoByQuery(value))
     }, 500),
     []
   )
@@ -43,8 +43,7 @@ function Navbar() {
         </div>
       </div>
       <div className='flex justify-around gap-5 items-center'>
-        <Video className='cursor-pointer'/>
-        <Bell className='cursor-pointer'/>
+        <Video onClick={()=>router.push(user?'/auth/dashboard/upload':'/signup')} className='cursor-pointer'/>
         <div onClick={()=>router.push(user?'/auth/dashboard/profile':'/signup')} className={`${user?'':'border'} p-1 px-2 border-white rounded-full hover:bg-slate-800 cursor-pointer flex items-center gap-2`}>
           {user?<img className='w-8 rounded-full' src={user?.avatar} alt='user'/>:<CircleUser />}
           {user?<></>:<span className='text-sm'>SignUp</span>}

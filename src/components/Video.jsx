@@ -6,6 +6,7 @@ import { useDispatch,useSelector } from 'react-redux'
 import { getVideoById, searchVideoById } from '@/store/slices/videoSlice.js'
 import { getChannelProfile, updateWatchHistory } from '@/store/slices/userSlice.js'
 import useLocalStorage from '@/hooks/useLocalStorage.jsx'
+import LoadingLine from './Loading'
 
 function Video({videoId}) {
   const dispatch = useDispatch()
@@ -61,7 +62,7 @@ function Video({videoId}) {
     setWatch({ video, owner })
   }
 
-  if(loading) return <>Loading...</>
+  if(loading) return <LoadingLine/>
   return (
     <div className='flex flex-col w-full md:w-[70%] md:pr-8 px-5 mt-5'>
       <div className='w-full'>

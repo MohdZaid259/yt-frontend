@@ -50,6 +50,7 @@ function Page() {
     setStatus((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  if(!shorts) return <div className='text-gray-500 text-sm p-4'>Request Limit exceeded. Server will take some time to cool down.</div>
   return (
     <>
       {shorts.length > 0 && (

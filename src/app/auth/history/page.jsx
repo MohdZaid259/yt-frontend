@@ -63,6 +63,7 @@ function page() {
           return <VideoItem
             setHasChanged={''}
             key={i}
+            videoId={item?.video?._id}
             type='history'
             thumbnail={item?.thumbnail}
             title={item?.title}

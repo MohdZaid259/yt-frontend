@@ -58,6 +58,7 @@ function page() {
             return <VideoItem
               setHasChanged={setHasChanged}
               key={i}
+              videoId={item?.video?._id}
               type='likedVideo'
               thumbnail={item?.video?.thumbnail}
               title={item?.video?.title}

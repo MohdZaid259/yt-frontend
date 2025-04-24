@@ -5,6 +5,7 @@ import { VideoList } from "@/components/dashboard/VideoList.jsx"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { getUserData, getUserVideos } from '@/store/slices/dashboardSlice.js'
+import Loading from '@/components/Loading.jsx'
 
 export default function DashboardPage() {
   const dispatch = useDispatch()
@@ -15,7 +16,7 @@ export default function DashboardPage() {
     dispatch(getUserVideos())
   },[])
   
-  if(loading) return <>Loading...</>
+  if(loading) return <Loading/>
   return (
     <div className="space-y-4 px-4 lg:mr-20 mb-20">
       <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>

@@ -59,6 +59,7 @@ export default function DownloadPage(){
             setHasChanged={setHasChanged}
             key={i}
             type='download'
+            videoId={item?.video?._id}
             thumbnail={item?.video?.thumbnail}
             title={item?.video?.title}
             channel={item?.owner?.fullname}

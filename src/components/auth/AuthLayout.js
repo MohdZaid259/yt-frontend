@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
+import LoadingLine from '../Loading';
 
 const AuthLayout = ({ children }) => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const AuthLayout = ({ children }) => {
     }
   }, [isAuthenticated, loading, router]);
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <LoadingLine/>
 
   return isAuthenticated ? <>{children}</> : null
 };
