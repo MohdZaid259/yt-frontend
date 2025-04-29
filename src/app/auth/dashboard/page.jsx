@@ -61,10 +61,7 @@ export default function DashboardPage() {
           You didn't post anything yet!!
         </span>
       )}
-      {videos.length > 0 &&
-        videos.map((item, i) => (
-          <VideoList key={i} prop={item} />
-        ))}
+      {videos.length > 0 && <VideoList/>}
     </div>
   )
 }

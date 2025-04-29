@@ -19,9 +19,9 @@ function Navbar() {
 
   const handler = useCallback(
     debounce((value) => {
-      dispatch(searchVideoByQuery(value))
+      dispatch(searchVideoByQuery({query:value}))
     }, 500),
-    []
+    [query,dispatch]
   )
 
   useEffect(()=>{

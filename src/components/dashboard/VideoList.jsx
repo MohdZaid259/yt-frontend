@@ -4,20 +4,16 @@ import { Pencil } from 'lucide-react';
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useSelector } from "react-redux"
 
 export function VideoList({prop}) {
-  const [data,setData] = useState([])
+  const { videos } = useSelector((state)=>state.dashboard)
   const router = useRouter()
-
-  useEffect(()=>{
-    setData([prop])
-  },[prop])
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {data?.map((video,i) => (
+      {videos && videos?.map((video,i) => (
         <Card key={i}>
           <CardContent className="p-3">
             <div className="space-y-2">
